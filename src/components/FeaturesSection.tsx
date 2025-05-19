@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import FeatureCard from './FeatureCard';
+import { motion } from 'framer-motion';
 
 const FeaturesSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -101,22 +102,41 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section id="features" ref={sectionRef} className="py-20 md:py-32 bg-gradient-to-b from-psyc-green/90 to-psyc-darkGreen/95 text-white relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-radial from-psyc-orange/10 to-transparent opacity-30"></div>
-      <div className="absolute bottom-0 right-0 w-full h-64 bg-gradient-radial from-psyc-orange/10 to-transparent opacity-30"></div>
+    <section id="features" ref={sectionRef} className="py-20 md:py-32 bg-gradient-to-b from-[#1a1a2e] to-[#121420] text-white relative overflow-hidden">
+      {/* Animated background grid */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmlkLWdyYWQiIHgxPSIwIiB5MT0iMCIgeDI9IjEwMCUiIHkyPSIwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI0ZGNkYwMCIgc3RvcC1vcGFjaXR5PSIwLjAzIi8+PHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiNGRjZGMDAiIHN0b3Atb3BhY2l0eT0iMC4wNSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0ZGNkYwMCIgc3RvcC1vcGFjaXR5PSIwLjAzIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBmaWxsPSJ1cmwoI2dyaWQtZ3JhZCkiIGQ9Ik0wIDAgaDYwIHY2MCBIMCBaIi8+PHBhdGggZD0iTTYwIDAgTDAgNjAiIHN0cm9rZT0iI0ZGNkYwMCIgc3Ryb2tlLXdpZHRoPSIwLjMyNSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDMiLz48cGF0aCBkPSJNMzAgMCBMMCA2MCIgc3Ryb2tlPSIjRkY2RjAwIiBzdHJva2Utd2lkdGg9IjAuMzI1IiBzdHJva2Utb3BhY2l0eT0iMC4wMyIvPjxwYXRoIGQ9Ik02MCAwIEwzMCA2MCIgc3Ryb2tlPSIjRkY2RjAwIiBzdHJva2Utd2lkdGg9IjAuMzI1IiBzdHJva2Utb3BhY2l0eT0iMC4wMyIvPjwvZz48L3N2Zz4=')] opacity-30 animate-[pulse_10s_ease-in-out_infinite]"></div>
+      
+      {/* Glowing accents */}
+      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-radial from-psyc-orange/5 to-transparent opacity-50"></div>
+      <div className="absolute bottom-0 right-0 w-full h-64 bg-gradient-radial from-psyc-orange/5 to-transparent opacity-50"></div>
       
       <div className="section-container relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Cutting-Edge Features</h2>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 relative inline-block">
+            <span className="text-gradient">Cutting-Edge Features</span>
+            <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-psyc-orange to-transparent"></div>
+          </h2>
           <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
             Our technology combines precision engineering, artificial intelligence, and wildlife expertise
             to create the most effective and humane wildlife control system available.
           </p>
-        </div>
+        </motion.div>
 
         <div className="mb-16">
-          <h3 className="text-2xl font-bold mb-8 text-psyc-orange">For Conservationists, Rangers, and Wildlife Officials</h3>
+          <motion.h3 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -20 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-2xl font-bold mb-8 text-psyc-orange flex items-center"
+          >
+            <span className="bg-psyc-orange/20 p-2 rounded-lg mr-3">01</span>
+            For Conservationists, Rangers, and Wildlife Officials
+          </motion.h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {conservationistFeatures.map((feature, index) => (
               <FeatureCard
@@ -133,7 +153,15 @@ const FeaturesSection = () => {
         </div>
 
         <div>
-          <h3 className="text-2xl font-bold mb-8 text-psyc-orange">For Technology Enthusiasts & Partners</h3>
+          <motion.h3 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -20 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="text-2xl font-bold mb-8 text-psyc-orange flex items-center"
+          >
+            <span className="bg-psyc-orange/20 p-2 rounded-lg mr-3">02</span>
+            For Technology Enthusiasts & Partners
+          </motion.h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {technologyFeatures.map((feature, index) => (
               <FeatureCard

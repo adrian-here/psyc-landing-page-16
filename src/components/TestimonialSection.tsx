@@ -1,217 +1,148 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { cn } from '@/lib/utils';
-import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
+import React, { useState, useRef, useEffect } from 'react';
+import { useKeenSlider } from 'keen-slider/react';
+import 'keen-slider/keen-slider.min.css';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-interface Testimonial {
-  id: number;
-  quote: string;
-  author: string;
-  title: string;
-  avatarIndex: number;
-}
+const testimonials = [
+  {
+    quote: "PSYC's drone technology has completely transformed how we approach elephant tranquilization. The precision and safety improvements are remarkable.",
+    author: "Dr. Sarah Johnson",
+    role: "Wildlife Veterinarian, Kenya Wildlife Service",
+    image: "/images/testimonial1.jpg"
+  },
+  {
+    quote: "After implementing PSYC's system, we've seen a 94% reduction in staff injuries during operations and significantly reduced stress in our animal subjects.",
+    author: "Michael Omondi",
+    role: "Conservation Director, East African Wildlife Trust",
+    image: "/images/testimonial2.jpg"
+  },
+  {
+    quote: "The data we're able to collect with PSYC drones has advanced our research capabilities by years. We're seeing patterns and behaviors we never could before.",
+    author: "Dr. Rachel Kruger",
+    role: "Research Lead, Global Elephant Protection",
+    image: "/images/testimonial3.jpg"
+  }
+];
 
 const TestimonialSection = () => {
-  const testimonials: Testimonial[] = [
-    {
-      id: 1,
-      quote: "PSYC's drones have revolutionized the way we handle tranquilization. We can now ensure animal safety while minimizing human risk.",
-      author: "Dr. Sarah Lee",
-      title: "Wildlife Veterinarian",
-      avatarIndex: 1
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+  const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
+    initial: 0,
+    slideChanged(slider) {
+      setCurrentSlide(slider.track.details.rel);
     },
-    {
-      id: 2,
-      quote: "The precision of PSYC's targeting system is remarkable. We've seen a 95% reduction in stress responses from elephants during capture operations.",
-      author: "James Thompson",
-      title: "Conservation Program Director",
-      avatarIndex: 2
+    created() {
+      setLoaded(true);
     },
-    {
-      id: 3,
-      quote: "After implementing PSYC's drone system, our team has experienced zero injuries during wildlife control operations. It's a complete game-changer.",
-      author: "Elena Rodriguez",
-      title: "Park Ranger Team Lead",
-      avatarIndex: 3
+    loop: true,
+    mode: "snap",
+    slides: {
+      perView: 1,
+      spacing: 20
     },
-    {
-      id: 4,
-      quote: "The real-time health monitoring has allowed us to immediately respond to any issues during tranquilization, dramatically improving animal welfare outcomes.",
-      author: "Dr. Michael Chen",
-      title: "Wildlife Research Coordinator",
-      avatarIndex: 4
-    },
-    {
-      id: 5,
-      quote: "Not only is the system safer, but it's also far more efficient. What used to take a full day now can be accomplished in under an hour.",
-      author: "Sophia Ndlovu",
-      title: "Conservation Technology Specialist",
-      avatarIndex: 5
-    }
-  ];
+  });
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
+  const autoplayRef = useRef<NodeJS.Timeout>();
+  
+  // Autoplay functionality
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
-      },
-      {
-        threshold: 0.2,
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
+    const slider = instanceRef.current;
+    
+    const autoplay = () => {
+      autoplayRef.current = setTimeout(() => {
+        if (slider) slider.next();
+      }, 5000); // Change slide every 5 seconds
     };
-  }, []);
+    
+    autoplay();
+    
+    slider?.on("slideChanged", () => {
+      if (autoplayRef.current) clearTimeout(autoplayRef.current);
+      autoplay();
+    });
+    
+    return () => {
+      if (autoplayRef.current) clearTimeout(autoplayRef.current);
+    };
+  }, [instanceRef]);
 
-  useEffect(() => {
-    if (!isVisible || isPaused) return;
-
-    const interval = setInterval(() => {
-      setActiveIndex((current) => (current + 1) % testimonials.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [testimonials.length, isPaused, isVisible]);
-
-  const handleDotClick = (index: number) => {
-    setActiveIndex(index);
-    setIsPaused(true);
-    setTimeout(() => setIsPaused(false), 5000);
+  const handleArrowClick = (direction: 'left' | 'right') => {
+    if (autoplayRef.current) clearTimeout(autoplayRef.current);
+    if (direction === 'left') {
+      instanceRef.current?.prev();
+    } else {
+      instanceRef.current?.next();
+    }
   };
 
   return (
-    <section 
-      id="testimonials"
-      ref={sectionRef}
-      className="py-20 md:py-28 bg-gradient-to-b from-psyc-darkGreen/95 to-psyc-darkest text-white relative overflow-hidden"
-    >
-      {/* Background elements */}
-      <div className="absolute top-0 right-0 w-full h-full bg-tech-grid bg-tech-grid opacity-10"></div>
-      <div className="absolute top-0 left-0 w-full h-64 bg-gradient-radial from-psyc-orange/10 to-transparent opacity-50"></div>
+    <section className="py-20 md:py-32 bg-[#0F131A] text-white relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,111,0,0.1),transparent_70%)] opacity-30"></div>
       
-      <div className="section-container relative z-10">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">What Experts Say</h2>
-          <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
-            Hear from wildlife professionals who have experienced the benefits of PSYC's technology
-          </p>
+      <div className="section-container relative">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 relative inline-block">
+            <span className="text-gradient">What Our Partners Say</span>
+            <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-psyc-orange to-transparent"></div>
+          </h2>
         </div>
-
-        <div className="relative max-w-4xl mx-auto">
-          {/* Testimonial cards */}
-          <div className="relative h-[320px] md:h-[250px]">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={testimonial.id}
-                className={cn(
-                  "absolute w-full transition-all duration-700 ease-in-out bg-black/40 backdrop-blur-lg p-8 rounded-xl border border-white/10",
-                  activeIndex === index
-                    ? "opacity-100 translate-x-0 scale-100 z-20"
-                    : index === (activeIndex + 1) % testimonials.length
-                    ? "opacity-0 translate-x-[70px] scale-95 z-10"
-                    : index === (activeIndex - 1 + testimonials.length) % testimonials.length
-                    ? "opacity-0 -translate-x-[70px] scale-95 z-10"
-                    : "opacity-0 scale-90 z-0"
-                )}
-              >
-                <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                  <div className="flex-shrink-0 relative">
-                    <div 
-                      className={`w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-psyc-green/50 to-psyc-orange/50 flex items-center justify-center border-2 border-psyc-orange/50 shadow-lg shadow-psyc-orange/20 overflow-hidden ${
-                        activeIndex === index ? 'animate-pulse-glow' : ''
-                      }`}
-                    >
-                      <div className="text-2xl font-bold text-white">{testimonial.author.charAt(0)}</div>
-                    </div>
-                    {/* Glow effect */}
-                    <div className="absolute -inset-1 bg-psyc-orange/30 rounded-full blur-md -z-10 animate-pulse opacity-80"></div>
+        
+        <div className="relative max-w-4xl mx-auto px-12">
+          <div ref={sliderRef} className="keen-slider min-h-[300px] md:min-h-[250px]">
+            {testimonials.map((testimonial, idx) => (
+              <div key={idx} className="keen-slider__slide">
+                <div className="glass-card p-8 md:p-10 rounded-xl text-center">
+                  <div className="w-20 h-20 mx-auto mb-6 relative">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-psyc-orange/30 to-amber-400/30 blur-md"></div>
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.author} 
+                      className="w-full h-full object-cover rounded-full border-2 border-psyc-orange/50 relative z-10"
+                    />
                   </div>
-                  <div className="flex-1 text-center md:text-left">
-                    <p className="text-lg md:text-xl italic mb-4 text-white/90">&ldquo;{testimonial.quote}&rdquo;</p>
-                    <div>
-                      <p className="font-bold text-psyc-orange">{testimonial.author}</p>
-                      <p className="text-sm text-white/70">{testimonial.title}</p>
-                    </div>
-                  </div>
+                  
+                  <blockquote className="text-lg md:text-xl text-white/90 mb-6 italic">
+                    "{testimonial.quote}"
+                  </blockquote>
+                  
+                  <div className="font-bold text-psyc-orange">{testimonial.author}</div>
+                  <div className="text-white/70 text-sm">{testimonial.role}</div>
                 </div>
-                
-                {/* Decorative elements */}
-                <div className="absolute -top-2 -left-2 w-10 h-10 border-t-2 border-l-2 border-psyc-orange/30 rounded-tl-lg"></div>
-                <div className="absolute -bottom-2 -right-2 w-10 h-10 border-b-2 border-r-2 border-psyc-orange/30 rounded-br-lg"></div>
               </div>
             ))}
           </div>
-
-          {/* Navigation dots */}
-          <div className="flex justify-center mt-8 space-x-2">
-            {testimonials.map((_, index) => (
+          
+          {loaded && instanceRef.current && (
+            <div className="flex justify-between items-center absolute top-1/2 left-0 right-0 -translate-y-1/2 pointer-events-none">
               <button
-                key={index}
-                onClick={() => handleDotClick(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-500 ${
-                  activeIndex === index
-                    ? 'bg-psyc-orange w-8 h-3'
-                    : 'bg-white/30 hover:bg-white/50'
-                }`}
-                aria-label={`Go to testimonial ${index + 1}`}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Avatar hover cards - interactive */}
-        <div className="hidden lg:flex justify-center mt-16 space-x-6">
-          {testimonials.map((testimonial) => (
-            <HoverCard key={testimonial.id}>
-              <HoverCardTrigger asChild>
-                <button className="relative group">
-                  <div className={`w-12 h-12 rounded-full bg-gradient-to-br from-psyc-green to-psyc-orange/50 flex items-center justify-center border border-white/20 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:shadow-psyc-orange/40`}>
-                    <span className="text-lg font-bold text-white">{testimonial.author.charAt(0)}</span>
-                  </div>
-                  <div className="absolute -inset-1 bg-psyc-orange/20 rounded-full blur-md -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </button>
-              </HoverCardTrigger>
-              <HoverCardContent className="bg-black/80 border border-psyc-orange/20 text-white backdrop-blur-xl">
-                <div className="flex flex-col space-y-2">
-                  <p className="text-sm italic">&ldquo;{testimonial.quote.substring(0, 80)}...&rdquo;</p>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-psyc-green/50 to-psyc-orange/50 flex items-center justify-center">
-                      <span className="text-sm font-bold">{testimonial.author.charAt(0)}</span>
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-psyc-orange">{testimonial.author}</p>
-                      <p className="text-xs text-white/70">{testimonial.title}</p>
-                    </div>
-                  </div>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
-          ))}
-        </div>
-
-        {/* Decorative elements */}
-        <div className="hidden lg:block">
-          <div className="absolute top-[30%] left-[15%] w-12 h-12 rounded-full bg-psyc-green/20 backdrop-blur-sm border border-psyc-green/30 opacity-60 animate-float"></div>
-          <div className="absolute top-[60%] left-[10%] w-8 h-8 rounded-full bg-psyc-orange/20 backdrop-blur-sm border border-psyc-orange/30 opacity-40 animate-float" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute top-[20%] right-[10%] w-10 h-10 rounded-full bg-psyc-gold/20 backdrop-blur-sm border border-psyc-gold/30 opacity-50 animate-float" style={{ animationDelay: '1.5s' }}></div>
-          <div className="absolute top-[70%] right-[15%] w-14 h-14 rounded-full bg-psyc-green/20 backdrop-blur-sm border border-psyc-green/30 opacity-60 animate-float" style={{ animationDelay: '0.7s' }}></div>
+                onClick={() => handleArrowClick('left')}
+                className="arrow-left bg-black/50 backdrop-blur-sm text-white p-3 rounded-full border border-white/10 hover:border-psyc-orange/50 transition-colors pointer-events-auto"
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <button
+                onClick={() => handleArrowClick('right')}
+                className="arrow-right bg-black/50 backdrop-blur-sm text-white p-3 rounded-full border border-white/10 hover:border-psyc-orange/50 transition-colors pointer-events-auto"
+              >
+                <ArrowRight size={20} />
+              </button>
+            </div>
+          )}
+          
+          {/* Progress bar instead of dots */}
+          {loaded && instanceRef.current && (
+            <div className="mt-8 bg-black/30 h-1 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-psyc-orange transition-all duration-300"
+                style={{ 
+                  width: `${(currentSlide + 1) / testimonials.length * 100}%` 
+                }}
+              ></div>
+            </div>
+          )}
         </div>
       </div>
     </section>

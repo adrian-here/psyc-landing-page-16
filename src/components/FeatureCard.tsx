@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface FeatureCardProps {
   title: string;
@@ -31,26 +32,32 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   };
 
   return (
-    <div
+    <motion.div
+      whileHover={{ scale: 1.03 }}
+      transition={{ duration: 0.2 }}
       className={cn(
-        'group bg-card-gradient backdrop-blur-sm rounded-xl p-6 border border-psyc-green/20 shadow-lg transition-all duration-500 hover-card-3d cursor-pointer relative overflow-hidden',
-        isExpanded ? 'ring-2 ring-psyc-orange/50' : '',
+        'group bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10 shadow-lg transition-all duration-500 hover-card-3d cursor-pointer relative overflow-hidden',
+        isExpanded ? 'ring-2 ring-psyc-orange' : '',
         className
       )}
       style={{
         ...style,
-        transform: `perspective(1000px) rotateX(${coords.y * 10}deg) rotateY(${coords.x * 10}deg) scale(${isExpanded ? 1.05 : 1})`
+        transform: `perspective(1000px) rotateX(${coords.y * 8}deg) rotateY(${coords.x * 8}deg) scale(${isExpanded ? 1.03 : 1})`
       }}
       onClick={() => setIsExpanded(!isExpanded)}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setCoords({ x: 0, y: 0 })}
     >
-      <div className="flex items-start space-x-4">
-        <div className="mt-1 p-3 bg-psyc-darkGreen/50 rounded-lg text-psyc-orange group-hover:text-white transition-colors duration-300 relative overflow-hidden">
+      {/* Tech grid background */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMCBoNDAgdjQwIEgwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDExMSwgMCwgMC4xKSIgc3Ryb2tlLXdpZHRoPSIwLjUiIHN0cm9rZS1kYXNoYXJyYXk9IjQgMiIvPjwvc3ZnPg==')] opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+      
+      <div className="relative z-10 flex items-start space-x-4">
+        <div className="mt-1 p-3 bg-black/50 rounded-lg text-psyc-orange group-hover:text-white transition-colors duration-300 relative overflow-hidden">
           {icon}
-          <div className="absolute inset-0 bg-gradient-to-r from-psyc-orange/0 via-psyc-orange/30 to-psyc-orange/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+          {/* Glow effect on icon */}
+          <div className="absolute inset-0 bg-gradient-to-r from-psyc-orange/0 via-psyc-orange/20 to-psyc-orange/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
         </div>
-        <div className="feature-card-content">
+        <div className="feature-card-content flex-1">
           <h3 className="text-xl font-bold mb-2 group-hover:text-psyc-orange transition-colors duration-300">
             {title}
           </h3>
@@ -61,13 +68,13 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
               isExpanded ? 'mt-4 max-h-[300px] opacity-100' : 'max-h-0 opacity-0'
             }`}
           >
-            <div className="p-4 bg-black/30 rounded-lg border border-psyc-orange/10">
+            <div className="p-4 bg-black/50 rounded-lg border border-psyc-orange/30 cyber-border">
               <p className="text-white/90">{expandedContent}</p>
             </div>
           </div>
           
           <button
-            className="mt-4 text-sm text-psyc-orange hover:text-psyc-gold transition-colors flex items-center"
+            className="mt-4 text-sm text-psyc-orange hover:text-amber-400 transition-colors flex items-center"
             onClick={(e) => {
               e.stopPropagation();
               setIsExpanded(!isExpanded);
@@ -93,12 +100,18 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         </div>
       </div>
       
+      {/* Corner accents */}
+      <div className="absolute top-0 left-0 w-5 h-5 border-t border-l border-psyc-orange/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute top-0 right-0 w-5 h-5 border-t border-r border-psyc-orange/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute bottom-0 left-0 w-5 h-5 border-b border-l border-psyc-orange/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-psyc-orange/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
       {/* Glow effect */}
-      <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-psyc-orange/0 via-psyc-orange/30 to-psyc-orange/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 z-[-1]"></div>
+      <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-psyc-orange/0 via-psyc-orange/20 to-psyc-orange/0 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 z-[-1]"></div>
       
       {/* Shimmer effect */}
-      <div className={`absolute inset-0 rounded-xl bg-shimmer-gradient bg-[length:200%_100%] animate-shimmer opacity-0 group-hover:opacity-20 pointer-events-none transition-opacity duration-300`}></div>
-    </div>
+      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/10 to-transparent bg-[length:200%_100%] -translate-x-full group-hover:animate-shimmer opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300"></div>
+    </motion.div>
   );
 };
 

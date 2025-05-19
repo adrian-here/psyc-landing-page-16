@@ -7,6 +7,7 @@ const DroneDemo = () => {
   const [isVisible, setIsVisible] = useState(false);
   const stepsRef = useRef<HTMLDivElement>(null);
   const [playAnimation, setPlayAnimation] = useState(false);
+  const [manualProgress, setManualProgress] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,28 +38,33 @@ const DroneDemo = () => {
     if (!isVisible) return;
 
     const handleScroll = () => {
-      if (!containerRef.current || !stepsRef.current) return;
+      if (!containerRef.current) return;
 
       const { top, height } = containerRef.current.getBoundingClientRect();
-      const stepsHeight = stepsRef.current.getBoundingClientRect().height;
-      
       const viewportHeight = window.innerHeight;
-      const scrollPosition = (viewportHeight - top) / (height + viewportHeight);
       
-      // Calculate which step should be active based on scroll position
-      const newStep = Math.min(
-        3,
-        Math.max(0, Math.floor(scrollPosition * 4))
-      );
-      
-      if (newStep !== currentStep) {
-        setCurrentStep(newStep);
-        setPlayAnimation(true);
-        setTimeout(() => setPlayAnimation(false), 1500);
+      // Calculate scroll progress through the section
+      let progress = 0;
+      if (top < viewportHeight && top > -height) {
+        // Calculate normalized progress (0 to 1) through the section
+        progress = Math.min(1, Math.max(0, 1 - (top / viewportHeight)));
+        setManualProgress(progress);
+        
+        // Map progress to steps (0-3)
+        const newStep = Math.min(3, Math.floor(progress * 4));
+        
+        if (newStep !== currentStep) {
+          setCurrentStep(newStep);
+          setPlayAnimation(true);
+          setTimeout(() => setPlayAnimation(false), 1500);
+        }
       }
     };
 
     window.addEventListener('scroll', handleScroll);
+    // Run once to initialize
+    handleScroll();
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isVisible, currentStep]);
 
@@ -102,13 +108,13 @@ const DroneDemo = () => {
   ];
 
   return (
-    <section id="demo" ref={containerRef} className="py-20 md:py-32 relative bg-psyc-darkest overflow-hidden">
+    <section id="demo" ref={containerRef} className="py-20 md:py-32 relative bg-[#121420] overflow-hidden">
       {/* Tech background */}
-      <div className="absolute inset-0 bg-tech-grid bg-tech-grid opacity-10"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMCBoNjAgdjYwIEgwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDExMSwgMCwgMC4wOCkiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9zdmc+')] opacity-20"></div>
       
       {/* Glow effects */}
       <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-psyc-orange/5 blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-psyc-green/5 blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-amber-500/5 blur-3xl"></div>
       
       <div className="section-container min-h-[800px]">
         <div className="text-center mb-12">
@@ -116,6 +122,15 @@ const DroneDemo = () => {
           <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
             Experience how the PSYC system works in the field with our interactive demonstration
           </p>
+          
+          {/* Progress bar */}
+          <div className="max-w-md mx-auto mt-8 bg-black/30 h-2 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-psyc-orange transition-all duration-300"
+              style={{ width: `${manualProgress * 100}%` }}
+            ></div>
+          </div>
+          <p className="text-sm text-white/60 mt-2">Scroll to advance through the demo</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
@@ -126,7 +141,7 @@ const DroneDemo = () => {
                 key={index}
                 className={`transition-all duration-700 p-5 md:p-6 rounded-lg relative overflow-hidden ${
                   currentStep === index 
-                    ? 'bg-psyc-green/30 border border-psyc-orange/30 shadow-lg shadow-psyc-orange/20 scale-[1.03]' 
+                    ? 'bg-black/50 border border-psyc-orange/50 shadow-lg shadow-psyc-orange/20 scale-[1.03]' 
                     : currentStep > index 
                       ? 'bg-black/30 border border-white/10 opacity-70' 
                       : 'bg-black/30 border border-white/5 opacity-50'
@@ -158,7 +173,7 @@ const DroneDemo = () => {
                 </p>
                 
                 {currentStep === index && (
-                  <div className="ml-11 mt-4 bg-black/40 backdrop-blur-sm p-4 rounded-lg border border-white/10 animate-fade-in">
+                  <div className="ml-11 mt-4 bg-black/40 backdrop-blur-sm p-4 rounded-lg border border-white/10 animate-fade-in cyber-border">
                     <div className="text-sm font-mono text-psyc-orange mb-2">SYSTEM OUTPUT:</div>
                     <p className="text-white/90 text-sm">{step.visualizationInfo}</p>
                     <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-white/80 font-mono">
@@ -187,14 +202,14 @@ const DroneDemo = () => {
           </div>
           
           {/* Visualization */}
-          <div className="relative h-[500px] bg-black/40 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 shadow-xl">
+          <div className="relative h-[500px] bg-black/40 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 shadow-xl cyber-border">
             <div className="absolute inset-0 p-4">
               {/* Terrain background */}
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-psyc-darkGreen/40"></div>
               
               {/* Grid lines */}
               <div className="absolute inset-0" style={{ 
-                backgroundImage: 'radial-gradient(circle, rgba(76, 140, 60, 0.2) 1px, transparent 1px)', 
+                backgroundImage: 'radial-gradient(circle, rgba(255, 111, 0, 0.1) 1px, transparent 1px)', 
                 backgroundSize: '30px 30px' 
               }}></div>
               
@@ -204,7 +219,7 @@ const DroneDemo = () => {
               )}
               
               {/* Trees and foliage */}
-              <div className="absolute bottom-0 left-0 w-full h-32 bg-psyc-darkGreen/40"></div>
+              <div className="absolute bottom-0 left-0 w-full h-32 bg-black/40"></div>
               
               {/* Drone */}
               <div 
@@ -305,15 +320,15 @@ const DroneDemo = () => {
                   {currentStep === 3 && (
                     <div className="absolute inset-0 pointer-events-none">
                       <svg viewBox="0 0 100 100" width="100" height="100">
-                        <circle cx="50" cy="50" r="40" stroke="#4C8C3C" strokeWidth="1" fill="none" />
-                        <path d="M35,50 L45,60 L65,40" stroke="#4C8C3C" strokeWidth="3" fill="none" />
+                        <circle cx="50" cy="50" r="40" stroke="#FFB74D" strokeWidth="1" fill="none" />
+                        <path d="M35,50 L45,60 L65,40" stroke="#FFB74D" strokeWidth="3" fill="none" />
                       </svg>
                     </div>
                   )}
                   
                   {/* Health monitoring */}
                   {currentStep === 3 && (
-                    <div className="absolute -top-12 -right-24 bg-black/70 backdrop-blur-md rounded-lg p-3 border border-white/10 text-xs font-mono text-green-400 animate-fade-in">
+                    <div className="absolute -top-12 -right-24 bg-black/70 backdrop-blur-md rounded-lg p-3 border border-white/10 text-xs font-mono text-green-400 animate-fade-in cyber-border">
                       <div>VITALS:</div>
                       <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-1">
                         <div>♥ 42 BPM</div>

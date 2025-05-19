@@ -3,44 +3,44 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 110 25% 8%;
-    --foreground: 100 5% 95%;
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
 
-    --card: 110 20% 12%;
-    --card-foreground: 100 5% 95%;
+    --card: 222 47% 15%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 110 20% 12%;
-    --popover-foreground: 100 5% 95%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 100 40% 40%;
+    --primary: 24 100% 50%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 36 50% 80%;
+    --secondary: 217 76% 83%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 110 15% 15%;
+    --muted: 217 33% 17%;
     --muted-foreground: 215 20.2% 65.1%;
 
     --accent: 24 100% 50%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent-foreground: 210 20% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 110 15% 25%;
-    --input: 110 15% 25%;
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
     --ring: 24 100% 50%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 110 20% 12%;
+    --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 240 5.3% 85%;
     --sidebar-primary: 240 5.9% 90%;
-    --sidebar-primary-foreground: 110 20% 12%;
+    --sidebar-primary-foreground: 222 47% 11%;
     --sidebar-accent: 240 4.8% 20%;
     --sidebar-accent-foreground: 240 5.9% 90%;
     --sidebar-border: 220 13% 25%;
@@ -59,7 +59,7 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Rajdhani', sans-serif;
   }
 
   h1, h2, h3, h4 {
@@ -68,14 +68,14 @@
   }
   
   h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Exo 2', sans-serif;
     @apply font-medium;
   }
 }
 
 @layer components {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-psyc-orange via-psyc-gold to-psyc-orange;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-psyc-orange via-amber-400 to-psyc-orange;
   }
   
   .glass-card {
@@ -91,7 +91,7 @@
   }
   
   .btn-primary {
-    @apply px-6 py-3 bg-psyc-green text-white rounded-md font-medium shadow-md transition-all duration-300 hover:bg-psyc-darkGreen hover:shadow-lg hover:shadow-psyc-green/40 relative overflow-hidden;
+    @apply px-6 py-3 bg-psyc-orange text-white rounded-md font-medium shadow-md transition-all duration-300 hover:bg-amber-500 hover:shadow-lg hover:shadow-psyc-orange/40 relative overflow-hidden;
   }
   
   .btn-secondary {
@@ -99,7 +99,7 @@
   }
   
   .tech-text {
-    font-family: 'Space Grotesk', monospace;
+    font-family: 'Exo 2', monospace;
     @apply text-sm tracking-wider;
   }
 }
@@ -164,6 +164,54 @@
   overflow: hidden;
 }
 
+/* Futuristic UI elements */
+.cyber-border {
+  position: relative;
+  border: 1px solid rgba(255, 111, 0, 0.3);
+  overflow: hidden;
+}
+
+.cyber-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FF6F00, transparent);
+  animation: cyber-border-flow 3s linear infinite;
+}
+
+.cyber-border::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FF6F00, transparent);
+  animation: cyber-border-flow-reverse 3s linear infinite;
+}
+
+@keyframes cyber-border-flow {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes cyber-border-flow-reverse {
+  0% { right: -100%; }
+  100% { right: 100%; }
+}
+
+.feature-glow {
+  box-shadow: 0 0 20px 5px rgba(255, 111, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.feature-glow:hover {
+  box-shadow: 0 0 30px 10px rgba(255, 111, 0, 0.3);
+}
+
 @keyframes drawPath {
   to {
     stroke-dashoffset: 0;
@@ -210,4 +258,23 @@
   100% {
     background-position: 500px 0;
   }
+}
+
+/* Modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 111, 0, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 111, 0, 0.8);
 }
