@@ -8,6 +8,7 @@ interface FeatureCardProps {
   icon: React.ReactNode;
   expandedContent: string;
   className?: string;
+  style?: React.CSSProperties; // Added style prop
 }
 
 const FeatureCard: React.FC<FeatureCardProps> = ({
@@ -16,6 +17,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   icon,
   expandedContent,
   className,
+  style, // Added style prop
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -26,6 +28,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         isExpanded ? 'ring-2 ring-psyc-orange/50 scale-[1.02]' : '',
         className
       )}
+      style={style} // Added style prop
       onClick={() => setIsExpanded(!isExpanded)}
     >
       <div className="flex items-start space-x-4">
