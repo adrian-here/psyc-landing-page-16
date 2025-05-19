@@ -10,22 +10,26 @@ import StatsSection from '@/components/StatsSection';
 import CompetitiveEdge from '@/components/CompetitiveEdge';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
+import ThreeDBackground from '@/components/ThreeDBackground';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-psyc-darkGreen text-white">
-      <Navbar />
-      <main>
-        <HeroSection />
-        <ProblemSolutionSection />
-        <FeaturesSection />
-        <DroneDemo />
-        <TestimonialSection />
-        <StatsSection />
-        <CompetitiveEdge />
-        <CTASection />
-        <Footer />
-      </main>
+    <div className="min-h-screen bg-psyc-darkest text-white relative overflow-hidden">
+      <ThreeDBackground />
+      <div className="relative z-10">
+        <Navbar />
+        <main>
+          <HeroSection />
+          <ProblemSolutionSection />
+          <FeaturesSection />
+          <DroneDemo />
+          <TestimonialSection />
+          <StatsSection />
+          <CompetitiveEdge />
+          <CTASection />
+          <Footer />
+        </main>
+      </div>
     </div>
   );
 };

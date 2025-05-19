@@ -3,18 +3,18 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 100 5% 95%;
-    --foreground: 110 10% 15%;
+    --background: 110 25% 8%;
+    --foreground: 100 5% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 110 20% 12%;
+    --card-foreground: 100 5% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 110 20% 12%;
+    --popover-foreground: 100 5% 95%;
 
     --primary: 100 40% 40%;
     --primary-foreground: 210 40% 98%;
@@ -22,8 +22,8 @@
     --secondary: 36 50% 80%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 110 10% 90%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 110 15% 15%;
+    --muted-foreground: 215 20.2% 65.1%;
 
     --accent: 24 100% 50%;
     --accent-foreground: 222.2 47.4% 11.2%;
@@ -31,50 +31,20 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 110 15% 25%;
+    --input: 110 15% 25%;
     --ring: 24 100% 50%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
+    --sidebar-background: 110 20% 12%;
+    --sidebar-foreground: 240 5.3% 85%;
+    --sidebar-primary: 240 5.9% 90%;
+    --sidebar-primary-foreground: 110 20% 12%;
+    --sidebar-accent: 240 4.8% 20%;
+    --sidebar-accent-foreground: 240 5.9% 90%;
+    --sidebar-border: 220 13% 25%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 110 15% 15%;
-    --foreground: 100 5% 95%;
-
-    --card: 110 10% 20%;
-    --card-foreground: 100 5% 95%;
-
-    --popover: 110 10% 20%;
-    --popover-foreground: 100 5% 95%;
-
-    --primary: 100 40% 40%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 36 30% 30%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 110 10% 25%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 24 100% 50%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 110 10% 25%;
-    --input: 110 10% 25%;
-    --ring: 24 100% 50%;
   }
 }
 
@@ -92,8 +62,14 @@
     font-family: 'Poppins', sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1, h2, h3, h4 {
+    font-family: 'Orbitron', sans-serif;
+    @apply font-bold tracking-wider;
+  }
+  
+  h5, h6 {
     font-family: 'Space Grotesk', sans-serif;
+    @apply font-medium;
   }
 }
 
@@ -103,23 +79,38 @@
   }
   
   .glass-card {
-    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-xl;
+    @apply bg-black/30 backdrop-blur-lg border border-white/10 rounded-xl shadow-xl;
   }
   
   .hover-card {
-    @apply transition-all duration-300 hover:shadow-lg hover:shadow-psyc-orange/20 hover:scale-[1.02] hover:border-psyc-orange/30;
+    @apply transition-all duration-300 hover:shadow-lg hover:shadow-psyc-orange/40 hover:scale-105 hover:border-psyc-orange/50;
   }
   
   .section-container {
-    @apply max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24;
+    @apply max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-20;
   }
   
   .btn-primary {
-    @apply px-6 py-3 bg-psyc-green text-white rounded-md font-medium shadow-md transition-all duration-300 hover:bg-psyc-darkGreen hover:shadow-lg hover:shadow-psyc-green/20;
+    @apply px-6 py-3 bg-psyc-green text-white rounded-md font-medium shadow-md transition-all duration-300 hover:bg-psyc-darkGreen hover:shadow-lg hover:shadow-psyc-green/40 relative overflow-hidden group;
+  }
+  
+  .btn-primary::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer;
   }
   
   .btn-secondary {
-    @apply px-6 py-3 bg-transparent border-2 border-psyc-orange text-psyc-orange rounded-md font-medium shadow-md transition-all duration-300 hover:bg-psyc-orange/10 hover:shadow-lg hover:shadow-psyc-orange/20;
+    @apply px-6 py-3 bg-transparent border-2 border-psyc-orange text-psyc-orange rounded-md font-medium shadow-md transition-all duration-300 hover:bg-psyc-orange/20 hover:shadow-lg hover:shadow-psyc-orange/40 relative overflow-hidden group;
+  }
+  
+  .btn-secondary::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer;
+  }
+  
+  .tech-text {
+    font-family: 'Space Grotesk', monospace;
+    @apply text-sm tracking-wider;
   }
 }
 
@@ -128,11 +119,83 @@
 }
 
 .glow {
-  box-shadow: 0 0 15px 5px rgba(255, 111, 0, 0.2);
+  box-shadow: 0 0 15px 5px rgba(255, 111, 0, 0.3);
 }
 
 .shimmer {
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
+}
+
+.hover-card-3d {
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.hover-card-3d:hover {
+  transform: rotateY(5deg) rotateX(5deg) scale(1.05);
+  box-shadow: 
+    0 5px 15px rgba(0,0,0,0.3),
+    0 0 25px rgba(255, 111, 0, 0.4);
+}
+
+.feature-card-content {
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.drone-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawPath 2s forwards ease-in-out;
+}
+
+@keyframes drawPath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.scan-line {
+  background: linear-gradient(180deg, 
+    rgba(255, 111, 0, 0) 0%, 
+    rgba(255, 111, 0, 0.3) 50%, 
+    rgba(255, 111, 0, 0) 100%);
+  animation: scanAnimation 4s infinite linear;
+  width: 100%;
+  height: 120px;
+  position: absolute;
+  left: 0;
+  transform: translateY(-60px);
+}
+
+@keyframes scanAnimation {
+  0% {
+    top: -120px;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -500px 0;
+  }
+  100% {
+    background-position: 500px 0;
+  }
 }

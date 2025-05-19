@@ -6,6 +6,7 @@ const DroneDemo = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const stepsRef = useRef<HTMLDivElement>(null);
+  const [playAnimation, setPlayAnimation] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -17,7 +18,7 @@ const DroneDemo = () => {
         }
       },
       {
-        threshold: 0.2,
+        threshold: 0.3,
       }
     );
 
@@ -50,12 +51,16 @@ const DroneDemo = () => {
         Math.max(0, Math.floor(scrollPosition * 4))
       );
       
-      setCurrentStep(newStep);
+      if (newStep !== currentStep) {
+        setCurrentStep(newStep);
+        setPlayAnimation(true);
+        setTimeout(() => setPlayAnimation(false), 1500);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isVisible]);
+  }, [isVisible, currentStep]);
 
   const steps = [
     {
@@ -97,32 +102,39 @@ const DroneDemo = () => {
   ];
 
   return (
-    <section id="demo" ref={containerRef} className="py-20 md:py-40 relative bg-psyc-darkGreen/90 overflow-hidden">
+    <section id="demo" ref={containerRef} className="py-20 md:py-32 relative bg-psyc-darkest overflow-hidden">
+      {/* Tech background */}
+      <div className="absolute inset-0 bg-tech-grid bg-tech-grid opacity-10"></div>
+      
+      {/* Glow effects */}
+      <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-psyc-orange/5 blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-psyc-green/5 blur-3xl"></div>
+      
       <div className="section-container min-h-[800px]">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white">Drone Demo</h2>
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">Drone Demo</h2>
           <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
             Experience how the PSYC system works in the field with our interactive demonstration
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Steps */}
-          <div ref={stepsRef} className="space-y-6 md:space-y-8 bg-black/20 p-6 md:p-8 rounded-xl backdrop-blur-sm">
+          <div ref={stepsRef} className="space-y-6 md:space-y-8 glass-card p-6 md:p-8 rounded-xl">
             {steps.map((step, index) => (
               <div 
                 key={index}
-                className={`transition-all duration-500 p-4 md:p-6 rounded-lg ${
+                className={`transition-all duration-700 p-5 md:p-6 rounded-lg relative overflow-hidden ${
                   currentStep === index 
-                    ? 'bg-psyc-green/30 border-l-4 border-psyc-orange shadow-lg scale-[1.02]' 
+                    ? 'bg-psyc-green/30 border border-psyc-orange/30 shadow-lg shadow-psyc-orange/20 scale-[1.03]' 
                     : currentStep > index 
-                      ? 'bg-white/5 opacity-70' 
-                      : 'bg-white/5 opacity-50'
+                      ? 'bg-black/30 border border-white/10 opacity-70' 
+                      : 'bg-black/30 border border-white/5 opacity-50'
                 }`}
               >
-                <div className="flex items-center mb-2">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 transition-all duration-300 ${
-                    currentStep >= index ? 'bg-psyc-orange text-white' : 'bg-white/20 text-white/60'
+                <div className="flex items-center mb-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 transition-all duration-500 ${
+                    currentStep >= index ? 'bg-psyc-orange text-white' : 'bg-white/10 text-white/60'
                   }`}>
                     {currentStep > index ? (
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -132,48 +144,53 @@ const DroneDemo = () => {
                       <span>{index + 1}</span>
                     )}
                   </div>
-                  <h3 className={`font-bold transition-colors duration-300 ${
+                  <h3 className={`font-bold transition-colors duration-500 ${
                     currentStep === index ? 'text-white' : 'text-white/70'
                   }`}>
                     {step.title}
                   </h3>
                 </div>
                 
-                <p className={`ml-11 transition-all duration-300 ${
+                <p className={`ml-11 transition-all duration-500 ${
                   currentStep === index ? 'text-white/90' : 'text-white/50'
                 }`}>
                   {step.description}
                 </p>
                 
                 {currentStep === index && (
-                  <div className="ml-11 mt-4 bg-black/30 p-3 rounded animate-fade-in">
+                  <div className="ml-11 mt-4 bg-black/40 backdrop-blur-sm p-4 rounded-lg border border-white/10 animate-fade-in">
                     <div className="text-sm font-mono text-psyc-orange mb-2">SYSTEM OUTPUT:</div>
-                    <p className="text-white/80 text-sm">{step.visualizationInfo}</p>
-                    <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-white/70 font-mono">
+                    <p className="text-white/90 text-sm">{step.visualizationInfo}</p>
+                    <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-white/80 font-mono">
                       <div className="flex flex-col">
-                        <span className="text-psyc-green">BATTERY</span>
+                        <span className="text-psyc-orange">BATTERY</span>
                         <span>{step.stats.batteryLevel}</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-psyc-green">ALTITUDE</span>
+                        <span className="text-psyc-orange">ALTITUDE</span>
                         <span>{step.stats.altitude}</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-psyc-green">DISTANCE</span>
+                        <span className="text-psyc-orange">DISTANCE</span>
                         <span>{step.stats.distance}</span>
                       </div>
                     </div>
                   </div>
+                )}
+                
+                {/* Motion indicator */}
+                {currentStep === index && playAnimation && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-shimmer"></div>
                 )}
               </div>
             ))}
           </div>
           
           {/* Visualization */}
-          <div className="relative h-[500px] bg-gradient-to-b from-psyc-darkGreen/20 to-psyc-darkGreen/80 rounded-xl overflow-hidden border border-psyc-green/30 shadow-xl">
+          <div className="relative h-[500px] bg-black/40 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 shadow-xl">
             <div className="absolute inset-0 p-4">
               {/* Terrain background */}
-              <div className="absolute inset-0 bg-gradient-to-b from-psyc-darkGreen/10 to-psyc-darkGreen/80"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-psyc-darkGreen/40"></div>
               
               {/* Grid lines */}
               <div className="absolute inset-0" style={{ 
@@ -181,12 +198,17 @@ const DroneDemo = () => {
                 backgroundSize: '30px 30px' 
               }}></div>
               
+              {/* Scanning effect */}
+              {currentStep >= 0 && currentStep < 2 && (
+                <div className="scan-line"></div>
+              )}
+              
               {/* Trees and foliage */}
               <div className="absolute bottom-0 left-0 w-full h-32 bg-psyc-darkGreen/40"></div>
               
               {/* Drone */}
               <div 
-                className={`absolute w-10 h-10 transition-all duration-1000 ease-in-out`}
+                className={`absolute w-12 h-12 transition-all duration-1000 ease-in-out ${playAnimation ? 'animate-pulse' : ''}`}
                 style={{ 
                   top: steps[currentStep].dronePosition.top, 
                   left: steps[currentStep].dronePosition.left,
@@ -194,12 +216,12 @@ const DroneDemo = () => {
                 }}
               >
                 <div className="relative">
-                  <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#FF6F00" strokeWidth="1.5">
+                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#FF6F00" strokeWidth="1.5">
                     <path d="M12 12.5L7.5 15.5M12 12.5L16.5 15.5M12 12.5V19M7.5 15.5L4.5 13.5M7.5 15.5V19L12 22M16.5 15.5L19.5 13.5M16.5 15.5V19L12 22M4.5 13.5L2 12L4.5 10.5M4.5 13.5L7.5 11.5M19.5 13.5L22 12L19.5 10.5M19.5 13.5L16.5 11.5M4.5 10.5L7.5 8.5L12 5L16.5 8.5L19.5 10.5M7.5 8.5V11.5M16.5 8.5V11.5M12 5V8" />
                   </svg>
                   
                   {/* Scanning effect */}
-                  <div className="absolute -inset-4 rounded-full bg-psyc-orange/10 animate-pulse-glow"></div>
+                  <div className="absolute -inset-4 rounded-full bg-psyc-orange/20 animate-pulse-glow"></div>
                   
                   {/* Signal waves */}
                   <div className="absolute -inset-8 rounded-full border border-psyc-orange/30 opacity-0 animate-pulse" style={{ animationDelay: '0s' }}></div>
@@ -207,18 +229,34 @@ const DroneDemo = () => {
                 </div>
               </div>
               
+              {/* Drone path */}
+              {currentStep >= 0 && currentStep < 3 && (
+                <svg className="absolute inset-0 w-full h-full">
+                  <path 
+                    d={steps[currentStep].dronePath} 
+                    stroke="#FF6F00" 
+                    strokeWidth="2" 
+                    strokeDasharray="5 3"
+                    fill="none"
+                    className={`${playAnimation ? 'drone-path' : ''}`}
+                    opacity="0.7"
+                  />
+                </svg>
+              )}
+              
               {/* Dart trajectory */}
               {currentStep === 2 && (
-                <svg className="absolute inset-0 w-full h-full animate-fade-in" style={{ animationDuration: '0.3s' }}>
+                <svg className="absolute inset-0 w-full h-full">
                   <path 
                     d={steps[currentStep].dartPath} 
                     stroke="#FFB74D" 
                     strokeWidth="2" 
                     strokeDasharray="4 2"
                     fill="none"
-                    className="animate-dash"
+                    className={playAnimation ? 'drone-path' : ''}
+                    opacity="0.9"
                   />
-                  <circle cx="260" cy="130" r="3" fill="#FFB74D" className="animate-pulse-glow" />
+                  <circle cx="260" cy="130" r="4" fill="#FFB74D" className="animate-pulse-glow" />
                 </svg>
               )}
               
@@ -253,6 +291,16 @@ const DroneDemo = () => {
                     </div>
                   )}
                   
+                  {/* Dart impact */}
+                  {currentStep === 2 && playAnimation && (
+                    <div className="absolute top-1/3 right-1/3 w-8 h-8">
+                      <svg viewBox="0 0 24 24" width="32" height="32">
+                        <circle cx="12" cy="12" r="12" fill="#FF6F00" opacity="0.7" className="animate-pulse" />
+                        <circle cx="12" cy="12" r="6" fill="#FFB74D" />
+                      </svg>
+                    </div>
+                  )}
+                  
                   {/* Successful tranquilization */}
                   {currentStep === 3 && (
                     <div className="absolute inset-0 pointer-events-none">
@@ -265,25 +313,44 @@ const DroneDemo = () => {
                   
                   {/* Health monitoring */}
                   {currentStep === 3 && (
-                    <div className="absolute -top-12 -right-20 bg-black/60 rounded-lg p-2 text-xs font-mono text-green-400 animate-fade-in">
+                    <div className="absolute -top-12 -right-24 bg-black/70 backdrop-blur-md rounded-lg p-3 border border-white/10 text-xs font-mono text-green-400 animate-fade-in">
                       <div>VITALS:</div>
-                      <div>♥ 42 BPM</div>
-                      <div>O₂ 98%</div>
-                      <div>TEMP 36.8°C</div>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-1">
+                        <div>♥ 42 BPM</div>
+                        <div>O₂ 98%</div>
+                        <div>TEMP 36.8°C</div>
+                        <div>STATUS OK</div>
+                      </div>
                     </div>
                   )}
                 </div>
               </div>
               
               {/* Interface overlays */}
-              <div className="absolute top-2 left-2 right-2 flex justify-between text-xs font-mono text-psyc-orange">
-                <div>PSYC DRONE #D42-7</div>
+              <div className="absolute top-2 left-2 right-2 flex justify-between text-xs font-mono text-psyc-orange border-b border-psyc-orange/20 pb-1">
+                <div className="flex items-center">
+                  <div className="w-2 h-2 rounded-full bg-psyc-orange animate-pulse mr-1"></div> 
+                  PSYC DRONE #D42-7
+                </div>
                 <div className="animate-pulse">● LIVE FEED</div>
               </div>
               
               {/* Distance marker */}
-              <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 bg-black/60 px-3 py-1 rounded text-xs text-white font-mono">
+              <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 bg-black/70 backdrop-blur-md px-3 py-1 rounded-md text-xs text-white font-mono border border-white/10">
                 DISTANCE: {steps[currentStep].stats.distance}
+              </div>
+              
+              {/* Coordinates */}
+              <div className="absolute bottom-3 left-3 bg-black/60 px-2 py-1 rounded text-xs text-white/70 font-mono">
+                LAT: 2°31'12"S LON: 34°49'55"E
+              </div>
+              
+              {/* Status indicators */}
+              <div className="absolute top-2 right-3 flex flex-col items-end space-y-1">
+                <div className="px-2 py-1 bg-black/60 rounded text-xs font-mono flex items-center">
+                  <span className="w-2 h-2 rounded-full bg-green-500 mr-1"></span>
+                  <span className="text-white/80">SYSTEM OPTIMAL</span>
+                </div>
               </div>
             </div>
           </div>
