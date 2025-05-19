@@ -91,21 +91,11 @@
   }
   
   .btn-primary {
-    @apply px-6 py-3 bg-psyc-green text-white rounded-md font-medium shadow-md transition-all duration-300 hover:bg-psyc-darkGreen hover:shadow-lg hover:shadow-psyc-green/40 relative overflow-hidden group;
-  }
-  
-  .btn-primary::after {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer;
+    @apply px-6 py-3 bg-psyc-green text-white rounded-md font-medium shadow-md transition-all duration-300 hover:bg-psyc-darkGreen hover:shadow-lg hover:shadow-psyc-green/40 relative overflow-hidden;
   }
   
   .btn-secondary {
-    @apply px-6 py-3 bg-transparent border-2 border-psyc-orange text-psyc-orange rounded-md font-medium shadow-md transition-all duration-300 hover:bg-psyc-orange/20 hover:shadow-lg hover:shadow-psyc-orange/40 relative overflow-hidden group;
-  }
-  
-  .btn-secondary::after {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer;
+    @apply px-6 py-3 bg-transparent border-2 border-psyc-orange text-psyc-orange rounded-md font-medium shadow-md transition-all duration-300 hover:bg-psyc-orange/20 hover:shadow-lg hover:shadow-psyc-orange/40 relative overflow-hidden;
   }
   
   .tech-text {
@@ -150,6 +140,28 @@
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
   animation: drawPath 2s forwards ease-in-out;
+}
+
+/* Group-based animations */
+.btn-primary::after,
+.btn-secondary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+}
+
+.group:hover .btn-primary::after,
+.group:hover .btn-secondary::after {
+  animation: shimmer 2s infinite;
+}
+
+/* Button modifications for group usage */
+.btn-primary.group,
+.btn-secondary.group {
+  position: relative;
+  overflow: hidden;
 }
 
 @keyframes drawPath {
