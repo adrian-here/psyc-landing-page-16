@@ -1,5 +1,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
+import { RotateCcw, Pause, Play } from 'lucide-react';
 
 const DroneDemo = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -40,6 +41,11 @@ const DroneDemo = () => {
   useEffect(() => {
     if (!isVisible || !animationStarted || isPaused) return;
 
+    // Clear any previous timer
+    if (animationTimerRef.current) {
+      clearTimeout(animationTimerRef.current);
+    }
+
     // Start the animation sequence
     animationTimerRef.current = setTimeout(() => {
       if (currentStep < 3) {
@@ -67,13 +73,16 @@ const DroneDemo = () => {
 
   // Reset animation
   const handleResetClick = () => {
+    if (animationTimerRef.current) {
+      clearTimeout(animationTimerRef.current);
+    }
     setCurrentStep(0);
     setIsPaused(false);
   };
 
-  // Resume animation
-  const handlePlayClick = () => {
-    setIsPaused(false);
+  // Toggle pause/play
+  const handlePlayPauseClick = () => {
+    setIsPaused(prev => !prev);
   };
 
   const steps = [
@@ -144,38 +153,29 @@ const DroneDemo = () => {
             <button 
               onClick={handleResetClick} 
               className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors"
+              aria-label="Restart demonstration"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 12a9 9 0 1 1 18 0 9 9 0 0 1-18 0z"></path>
-                <path d="M9 10l6 4-6 4V10z"></path>
-              </svg>
+              <RotateCcw size={16} />
               <span>Restart</span>
             </button>
             
-            {isPaused ? (
-              <button 
-                onClick={handlePlayClick} 
-                className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polygon points="10 8 16 12 10 16 10 8"></polygon>
-                </svg>
-                <span>Resume</span>
-              </button>
-            ) : (
-              <button 
-                onClick={() => setIsPaused(true)} 
-                className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="10" y1="15" x2="10" y2="9"></line>
-                  <line x1="14" y1="15" x2="14" y2="9"></line>
-                </svg>
-                <span>Pause</span>
-              </button>
-            )}
+            <button 
+              onClick={handlePlayPauseClick} 
+              className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors"
+              aria-label={isPaused ? "Resume demonstration" : "Pause demonstration"}
+            >
+              {isPaused ? (
+                <>
+                  <Play size={16} />
+                  <span>Resume</span>
+                </>
+              ) : (
+                <>
+                  <Pause size={16} />
+                  <span>Pause</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
 
@@ -261,7 +261,7 @@ const DroneDemo = () => {
               }}></div>
               
               {/* Scanning effect */}
-              {currentStep >= 0 && currentStep < 2 && (
+              {!isPaused && currentStep >= 0 && currentStep < 2 && (
                 <div className="scan-line"></div>
               )}
               
@@ -270,7 +270,7 @@ const DroneDemo = () => {
               
               {/* Drone */}
               <div 
-                className={`absolute w-12 h-12 transition-all duration-1000 ease-in-out ${currentStep === 0 || currentStep === 3 ? 'animate-pulse' : ''}`}
+                className={`absolute w-12 h-12 transition-all duration-1000 ease-in-out ${(currentStep === 0 || currentStep === 3) && !isPaused ? 'animate-pulse' : ''}`}
                 style={{ 
                   top: steps[currentStep].dronePosition.top, 
                   left: steps[currentStep].dronePosition.left,
@@ -283,11 +283,15 @@ const DroneDemo = () => {
                   </svg>
                   
                   {/* Scanning effect */}
-                  <div className="absolute -inset-4 rounded-full bg-psyc-orange/20 animate-pulse-glow"></div>
+                  <div className={`absolute -inset-4 rounded-full bg-psyc-orange/20 ${!isPaused ? 'animate-pulse-glow' : ''}`}></div>
                   
                   {/* Signal waves */}
-                  <div className="absolute -inset-8 rounded-full border border-psyc-orange/30 opacity-0 animate-pulse" style={{ animationDelay: '0s' }}></div>
-                  <div className="absolute -inset-12 rounded-full border border-psyc-orange/20 opacity-0 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                  {!isPaused && (
+                    <>
+                      <div className="absolute -inset-8 rounded-full border border-psyc-orange/30 opacity-0 animate-pulse" style={{ animationDelay: '0s' }}></div>
+                      <div className="absolute -inset-12 rounded-full border border-psyc-orange/20 opacity-0 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                    </>
+                  )}
                 </div>
               </div>
               
@@ -300,7 +304,7 @@ const DroneDemo = () => {
                     strokeWidth="2" 
                     strokeDasharray="5 3"
                     fill="none"
-                    className="drone-path"
+                    className={`drone-path ${!isPaused ? '' : 'animation-paused'}`}
                     opacity="0.7"
                   />
                 </svg>
@@ -315,10 +319,10 @@ const DroneDemo = () => {
                     strokeWidth="2" 
                     strokeDasharray="4 2"
                     fill="none"
-                    className="drone-path"
+                    className={`drone-path ${!isPaused ? '' : 'animation-paused'}`}
                     opacity="0.9"
                   />
-                  <circle cx="260" cy="130" r="4" fill="#FFB74D" className="animate-pulse-glow" />
+                  <circle cx="260" cy="130" r="4" fill="#FFB74D" className={!isPaused ? 'animate-pulse-glow' : ''} />
                 </svg>
               )}
               
@@ -344,10 +348,10 @@ const DroneDemo = () => {
                   {currentStep >= 1 && currentStep < 3 && (
                     <div className="absolute inset-0 pointer-events-none">
                       <svg viewBox="0 0 100 100" width="100" height="100">
-                        <circle cx="50" cy="50" r="40" stroke="#FF6F00" strokeWidth="1" fill="none" strokeDasharray="5 3" className="animate-rotate-slow" />
-                        <circle cx="50" cy="50" r="30" stroke="#FF6F00" strokeWidth="1" fill="none" strokeDasharray="3 2" className="animate-rotate-slow" style={{ animationDirection: 'reverse' }} />
-                        <circle cx="50" cy="50" r="20" stroke="#FF6F00" strokeWidth="1" fill="none" strokeDasharray="2 1" className="animate-rotate-slow" />
-                        <circle cx="55" cy="45" r="5" stroke="#FF6F00" strokeWidth="2" fill="none" className="animate-pulse-glow" />
+                        <circle cx="50" cy="50" r="40" stroke="#FF6F00" strokeWidth="1" fill="none" strokeDasharray="5 3" className={!isPaused ? 'animate-rotate-slow' : ''} />
+                        <circle cx="50" cy="50" r="30" stroke="#FF6F00" strokeWidth="1" fill="none" strokeDasharray="3 2" className={!isPaused ? 'animate-rotate-slow' : ''} style={{ animationDirection: 'reverse' }} />
+                        <circle cx="50" cy="50" r="20" stroke="#FF6F00" strokeWidth="1" fill="none" strokeDasharray="2 1" className={!isPaused ? 'animate-rotate-slow' : ''} />
+                        <circle cx="55" cy="45" r="5" stroke="#FF6F00" strokeWidth="2" fill="none" className={!isPaused ? 'animate-pulse-glow' : ''} />
                         <path d="M55,40 L55,35 M60,45 L65,45" stroke="#FF6F00" strokeWidth="1" />
                       </svg>
                     </div>
@@ -357,7 +361,7 @@ const DroneDemo = () => {
                   {currentStep === 2 && (
                     <div className="absolute top-1/3 right-1/3 w-8 h-8">
                       <svg viewBox="0 0 24 24" width="32" height="32">
-                        <circle cx="12" cy="12" r="12" fill="#FF6F00" opacity="0.7" className="animate-pulse" />
+                        <circle cx="12" cy="12" r="12" fill="#FF6F00" opacity="0.7" className={!isPaused ? 'animate-pulse' : ''} />
                         <circle cx="12" cy="12" r="6" fill="#FFB74D" />
                       </svg>
                     </div>
@@ -391,10 +395,10 @@ const DroneDemo = () => {
               {/* Interface overlays */}
               <div className="absolute top-2 left-2 right-2 flex justify-between text-xs font-mono text-psyc-orange border-b border-psyc-orange/20 pb-1">
                 <div className="flex items-center">
-                  <div className="w-2 h-2 rounded-full bg-psyc-orange animate-pulse mr-1"></div> 
+                  <div className={`w-2 h-2 rounded-full bg-psyc-orange ${!isPaused ? 'animate-pulse' : ''} mr-1`}></div> 
                   PSYC DRONE #D42-7
                 </div>
-                <div className="animate-pulse">● LIVE FEED</div>
+                <div className={!isPaused ? 'animate-pulse' : ''}>● LIVE FEED</div>
               </div>
               
               {/* Distance marker */}
@@ -410,8 +414,8 @@ const DroneDemo = () => {
               {/* Status indicators */}
               <div className="absolute top-2 right-3 flex flex-col items-end space-y-1">
                 <div className="px-2 py-1 bg-black/60 rounded text-xs font-mono flex items-center">
-                  <span className="w-2 h-2 rounded-full bg-green-500 mr-1"></span>
-                  <span className="text-white/80">SYSTEM OPTIMAL</span>
+                  <span className={`w-2 h-2 rounded-full bg-green-500 mr-1 ${!isPaused ? 'pulse' : ''}`}></span>
+                  <span className="text-white/80">{isPaused ? "SYSTEM PAUSED" : "SYSTEM OPTIMAL"}</span>
                 </div>
               </div>
             </div>

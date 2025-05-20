@@ -2,9 +2,11 @@
 import React, { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Play } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
   const logoRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +22,17 @@ const HeroSection = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleWatchVideo = () => {
+    scrollToSection('demo');
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -54,16 +67,26 @@ const HeroSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8 md:mt-12 animate-fade-in">
-          <Button className="btn-primary w-full sm:w-auto">
+          <Button 
+            className="btn-primary w-full sm:w-auto"
+            onClick={() => scrollToSection('features')}
+          >
             Discover Our Approach
           </Button>
-          <Button variant="outline" className="btn-secondary w-full sm:w-auto flex items-center justify-center space-x-2">
+          <Button 
+            variant="outline" 
+            className="btn-secondary w-full sm:w-auto flex items-center justify-center space-x-2"
+            onClick={handleWatchVideo}
+          >
             <Play size={18} className="mr-2" />
             <span>Watch the Drone in Action</span>
           </Button>
         </div>
         
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div 
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer"
+          onClick={() => scrollToSection('problem-solution')}
+        >
           <svg
             width="24"
             height="24"

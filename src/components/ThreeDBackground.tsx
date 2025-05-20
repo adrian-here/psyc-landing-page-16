@@ -1,9 +1,10 @@
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 const ThreeDBackground = () => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [isActive, setIsActive] = useState(true);
   
   useEffect(() => {
     if (!mountRef.current) return;
@@ -154,8 +155,11 @@ const ThreeDBackground = () => {
     scene.add(particles);
     
     // Animation loop
+    let animationId: number;
     const animate = () => {
-      requestAnimationFrame(animate);
+      if (!isActive) return;
+      
+      animationId = requestAnimationFrame(animate);
       
       // Animate drones
       drones.forEach(drone => {
@@ -201,6 +205,7 @@ const ThreeDBackground = () => {
       renderer.render(scene, camera);
     };
     
+    // Start animation
     animate();
     
     // Handle window resize
@@ -212,14 +217,41 @@ const ThreeDBackground = () => {
     
     window.addEventListener('resize', handleResize);
     
+    // Expose controls to window for external control
+    (window as any).threeDBackgroundControls = {
+      pause: () => {
+        setIsActive(false);
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+      },
+      resume: () => {
+        setIsActive(true);
+        animate();
+      },
+      toggle: () => {
+        if (isActive) {
+          (window as any).threeDBackgroundControls.pause();
+        } else {
+          (window as any).threeDBackgroundControls.resume();
+        }
+      }
+    };
+    
     return () => {
       window.removeEventListener('resize', handleResize);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+      if ((window as any).threeDBackgroundControls) {
+        (window as any).threeDBackgroundControls = null;
+      }
       if (mountRef.current) {
         mountRef.current.removeChild(renderer.domElement);
       }
       scene.clear();
     };
-  }, []);
+  }, [isActive]);
   
   return <div ref={mountRef} className="absolute inset-0 -z-10" />;
 };
