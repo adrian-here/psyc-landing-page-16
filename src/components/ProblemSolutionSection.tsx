@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
-import { Sparkles, RocketLaunch, TrendingUp } from 'lucide-react';
+import { Sparkles, Rocket, TrendingUp } from 'lucide-react';
 
 const ProblemSolutionSection = () => {
   const [activeTab, setActiveTab] = useState('problem');
@@ -190,7 +189,7 @@ const ProblemSolutionSection = () => {
               >
                 <h3 className="text-2xl font-bold mb-6 text-psyc-orange flex items-center">
                   <span className="mr-2 bg-psyc-orange/20 p-2 rounded-full">
-                    <RocketLaunch className="text-psyc-orange h-5 w-5" />
+                    <Rocket className="text-psyc-orange h-5 w-5" />
                   </span>
                   The PSYC Approach
                 </h3>
@@ -242,7 +241,7 @@ const ProblemSolutionSection = () => {
                           transition={{ type: "spring", stiffness: 300 }}
                         >
                           <div className="bg-psyc-orange/20 p-3 rounded-full mb-3">
-                            <RocketLaunch className="h-5 w-5 text-psyc-orange" />
+                            <Rocket className="h-5 w-5 text-psyc-orange" />
                           </div>
                           <h4 className="font-bold text-white">EFFICIENT</h4>
                           <p className="text-xs text-white/70 mt-1">Single-operator system with high success</p>
