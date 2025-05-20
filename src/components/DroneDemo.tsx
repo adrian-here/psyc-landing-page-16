@@ -5,17 +5,19 @@ const DroneDemo = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const stepsRef = useRef<HTMLDivElement>(null);
-  const [playAnimation, setPlayAnimation] = useState(false);
-  const [manualProgress, setManualProgress] = useState(0);
+  const [animationStarted, setAnimationStarted] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const animationTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Monitor when the section becomes visible
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
+        const isIntersecting = entry.isIntersecting;
+        setIsVisible(isIntersecting);
+        
+        if (isIntersecting && !animationStarted) {
+          setAnimationStarted(true);
         }
       },
       {
@@ -32,41 +34,47 @@ const DroneDemo = () => {
         observer.unobserve(containerRef.current);
       }
     };
-  }, []);
+  }, [animationStarted]);
 
+  // Handle the time-based animation
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || !animationStarted || isPaused) return;
 
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-
-      const { top, height } = containerRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      
-      // Calculate scroll progress through the section
-      let progress = 0;
-      if (top < viewportHeight && top > -height) {
-        // Calculate normalized progress (0 to 1) through the section
-        progress = Math.min(1, Math.max(0, 1 - (top / viewportHeight)));
-        setManualProgress(progress);
-        
-        // Map progress to steps (0-3)
-        const newStep = Math.min(3, Math.floor(progress * 4));
-        
-        if (newStep !== currentStep) {
-          setCurrentStep(newStep);
-          setPlayAnimation(true);
-          setTimeout(() => setPlayAnimation(false), 1500);
-        }
+    // Start the animation sequence
+    animationTimerRef.current = setTimeout(() => {
+      if (currentStep < 3) {
+        setCurrentStep(prev => prev + 1);
+      }
+    }, 3000); // 3 seconds per step
+    
+    return () => {
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
       }
     };
+  }, [isVisible, animationStarted, currentStep, isPaused]);
 
-    window.addEventListener('scroll', handleScroll);
-    // Run once to initialize
-    handleScroll();
+  // Handle step click
+  const handleStepClick = (stepIndex: number) => {
+    // Clear any existing timers
+    if (animationTimerRef.current) {
+      clearTimeout(animationTimerRef.current);
+    }
     
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isVisible, currentStep]);
+    setCurrentStep(stepIndex);
+    setIsPaused(true); // Pause automatic progression
+  };
+
+  // Reset animation
+  const handleResetClick = () => {
+    setCurrentStep(0);
+    setIsPaused(false);
+  };
+
+  // Resume animation
+  const handlePlayClick = () => {
+    setIsPaused(false);
+  };
 
   const steps = [
     {
@@ -126,25 +134,64 @@ const DroneDemo = () => {
           {/* Progress bar */}
           <div className="max-w-md mx-auto mt-8 bg-black/30 h-2 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-psyc-orange transition-all duration-300"
-              style={{ width: `${manualProgress * 100}%` }}
+              className="h-full bg-psyc-orange transition-all duration-700"
+              style={{ width: `${(currentStep + 1) * 25}%` }}
             ></div>
           </div>
-          <p className="text-sm text-white/60 mt-2">Scroll to advance through the demo</p>
+          
+          {/* Demo controls */}
+          <div className="flex items-center justify-center space-x-4 mt-4">
+            <button 
+              onClick={handleResetClick} 
+              className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 12a9 9 0 1 1 18 0 9 9 0 0 1-18 0z"></path>
+                <path d="M9 10l6 4-6 4V10z"></path>
+              </svg>
+              <span>Restart</span>
+            </button>
+            
+            {isPaused ? (
+              <button 
+                onClick={handlePlayClick} 
+                className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                </svg>
+                <span>Resume</span>
+              </button>
+            ) : (
+              <button 
+                onClick={() => setIsPaused(true)} 
+                className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="10" y1="15" x2="10" y2="9"></line>
+                  <line x1="14" y1="15" x2="14" y2="9"></line>
+                </svg>
+                <span>Pause</span>
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Steps */}
-          <div ref={stepsRef} className="space-y-6 md:space-y-8 glass-card p-6 md:p-8 rounded-xl">
+          <div className="space-y-6 md:space-y-8 glass-card p-6 md:p-8 rounded-xl">
             {steps.map((step, index) => (
               <div 
                 key={index}
-                className={`transition-all duration-700 p-5 md:p-6 rounded-lg relative overflow-hidden ${
+                onClick={() => handleStepClick(index)}
+                className={`transition-all duration-700 p-5 md:p-6 rounded-lg relative overflow-hidden cursor-pointer ${
                   currentStep === index 
                     ? 'bg-black/50 border border-psyc-orange/50 shadow-lg shadow-psyc-orange/20 scale-[1.03]' 
                     : currentStep > index 
-                      ? 'bg-black/30 border border-white/10 opacity-70' 
-                      : 'bg-black/30 border border-white/5 opacity-50'
+                      ? 'bg-black/30 border border-white/10 opacity-70 hover:opacity-90 hover:border-psyc-orange/30' 
+                      : 'bg-black/30 border border-white/5 opacity-50 hover:opacity-70 hover:border-white/20'
                 }`}
               >
                 <div className="flex items-center mb-3">
@@ -194,9 +241,9 @@ const DroneDemo = () => {
                 )}
                 
                 {/* Motion indicator */}
-                {currentStep === index && playAnimation && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-shimmer"></div>
-                )}
+                <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full ${
+                  currentStep === index ? 'animate-shimmer' : ''
+                }`}></div>
               </div>
             ))}
           </div>
@@ -223,7 +270,7 @@ const DroneDemo = () => {
               
               {/* Drone */}
               <div 
-                className={`absolute w-12 h-12 transition-all duration-1000 ease-in-out ${playAnimation ? 'animate-pulse' : ''}`}
+                className={`absolute w-12 h-12 transition-all duration-1000 ease-in-out ${currentStep === 0 || currentStep === 3 ? 'animate-pulse' : ''}`}
                 style={{ 
                   top: steps[currentStep].dronePosition.top, 
                   left: steps[currentStep].dronePosition.left,
@@ -253,7 +300,7 @@ const DroneDemo = () => {
                     strokeWidth="2" 
                     strokeDasharray="5 3"
                     fill="none"
-                    className={`${playAnimation ? 'drone-path' : ''}`}
+                    className="drone-path"
                     opacity="0.7"
                   />
                 </svg>
@@ -268,7 +315,7 @@ const DroneDemo = () => {
                     strokeWidth="2" 
                     strokeDasharray="4 2"
                     fill="none"
-                    className={playAnimation ? 'drone-path' : ''}
+                    className="drone-path"
                     opacity="0.9"
                   />
                   <circle cx="260" cy="130" r="4" fill="#FFB74D" className="animate-pulse-glow" />
@@ -307,7 +354,7 @@ const DroneDemo = () => {
                   )}
                   
                   {/* Dart impact */}
-                  {currentStep === 2 && playAnimation && (
+                  {currentStep === 2 && (
                     <div className="absolute top-1/3 right-1/3 w-8 h-8">
                       <svg viewBox="0 0 24 24" width="32" height="32">
                         <circle cx="12" cy="12" r="12" fill="#FF6F00" opacity="0.7" className="animate-pulse" />
