@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
@@ -49,15 +48,8 @@ const ProblemSolutionSection = () => {
     <section 
       id="about" 
       ref={sectionRef}
-      className="py-20 md:py-32 bg-[#151f2e] relative overflow-hidden"
+      className="py-20 md:py-32 relative overflow-hidden"
     >
-      {/* Animated background elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,111,0,0.15),transparent_70%)] opacity-30"></div>
-      <div className="absolute w-full h-full overflow-hidden opacity-10">
-        <div className="absolute -top-[40%] -left-[10%] w-[80%] h-[80%] rounded-full bg-gradient-to-r from-psyc-orange/30 via-psyc-gold/20 to-transparent blur-[80px] animate-pulse-glow"></div>
-        <div className="absolute -bottom-[40%] -right-[10%] w-[80%] h-[80%] rounded-full bg-gradient-to-l from-psyc-orange/30 via-psyc-gold/20 to-transparent blur-[80px] animate-pulse-glow"></div>
-      </div>
-      
       <div className="section-container relative z-10">
         <motion.h2 
           className="text-4xl md:text-5xl font-bold mb-12 text-center"
