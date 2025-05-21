@@ -1,28 +1,12 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
-  const logoRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   
-  useEffect(() => {
-    const handleScroll = () => {
-      if (logoRef.current) {
-        const scrollPosition = window.scrollY;
-        const opacity = Math.max(1 - scrollPosition / 500, 0.2);
-        logoRef.current.style.opacity = opacity.toString();
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -40,20 +24,6 @@ const HeroSection = () => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-hero-pattern"></div>
         <div className="absolute inset-0 bg-black/50"></div>
-      </div>
-
-      {/* Animated logo */}
-      <div 
-        ref={logoRef}
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 animate-pulse-glow pointer-events-none"
-      >
-        <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-psyc-green/20 backdrop-blur-sm flex items-center justify-center border border-psyc-green/30">
-          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-psyc-green/30 flex items-center justify-center border border-psyc-green/50">
-            <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-psyc-green flex items-center justify-center shadow-lg shadow-psyc-green/30">
-              <span className="text-white font-bold text-3xl md:text-5xl">PSYC</span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Content */}
