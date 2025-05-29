@@ -47,7 +47,7 @@ ${formData.message}
       setFormState('success');
       toast({
         title: "Email client opened",
-        description: "Your default email client should open with the pre-filled message. For automatic sending, please connect to Supabase.",
+        description: "Your default email client should open with the pre-filled message.",
       });
       
       // Reset form after successful submission
@@ -93,14 +93,6 @@ ${formData.message}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className="space-y-6">
               <h3 className="text-2xl font-bold text-psyc-orange">Contact Us</h3>
-              
-              {/* Email notice */}
-              <div className="bg-psyc-orange/10 border border-psyc-orange/30 rounded-lg p-4 mb-4">
-                <p className="text-sm text-white/80">
-                  <strong>Note:</strong> This form will open your email client. For automatic email sending, 
-                  connect to Supabase for backend functionality.
-                </p>
-              </div>
               
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-3">
