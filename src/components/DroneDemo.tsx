@@ -8,6 +8,7 @@ const DroneDemo = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [animationStarted, setAnimationStarted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [isAutoMode, setIsAutoMode] = useState(true);
   const animationTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Monitor when the section becomes visible
@@ -19,6 +20,7 @@ const DroneDemo = () => {
         
         if (isIntersecting && !animationStarted) {
           setAnimationStarted(true);
+          setCurrentStep(0);
         }
       },
       {
@@ -39,7 +41,7 @@ const DroneDemo = () => {
 
   // Handle the time-based animation
   useEffect(() => {
-    if (!isVisible || !animationStarted || isPaused) return;
+    if (!isVisible || !animationStarted || isPaused || !isAutoMode) return;
 
     // Clear any previous timer
     if (animationTimerRef.current) {
@@ -48,17 +50,22 @@ const DroneDemo = () => {
 
     // Start the animation sequence
     animationTimerRef.current = setTimeout(() => {
-      if (currentStep < 3) {
+      if (currentStep < 4) {
         setCurrentStep(prev => prev + 1);
+      } else {
+        // Reset to beginning after completing all steps
+        setTimeout(() => {
+          setCurrentStep(0);
+        }, 2000);
       }
-    }, 3000); // 3 seconds per step
+    }, 4000); // 4 seconds per step
     
     return () => {
       if (animationTimerRef.current) {
         clearTimeout(animationTimerRef.current);
       }
     };
-  }, [isVisible, animationStarted, currentStep, isPaused]);
+  }, [isVisible, animationStarted, currentStep, isPaused, isAutoMode]);
 
   // Handle step click
   const handleStepClick = (stepIndex: number) => {
@@ -68,7 +75,7 @@ const DroneDemo = () => {
     }
     
     setCurrentStep(stepIndex);
-    setIsPaused(true); // Pause automatic progression
+    setIsAutoMode(false); // Disable auto mode when manually selecting
   };
 
   // Reset animation
@@ -78,49 +85,67 @@ const DroneDemo = () => {
     }
     setCurrentStep(0);
     setIsPaused(false);
+    setIsAutoMode(true);
+    setAnimationStarted(true);
   };
 
   // Toggle pause/play
   const handlePlayPauseClick = () => {
     setIsPaused(prev => !prev);
+    if (isPaused) {
+      setIsAutoMode(true);
+    }
   };
 
   const steps = [
     {
-      title: "Drone Takeoff & Target Identification",
-      description: "The PSYC drone takes off autonomously and uses AI vision to identify and track the target animal.",
-      dronePosition: { top: '75%', left: '25%' },
-      dronePath: 'M25,100 Q75,20 150,40',
-      elephantPosition: { top: '55%', left: '70%' },
-      visualizationInfo: "AI scanning for elephant heat signatures and movement patterns",
-      stats: { batteryLevel: '98%', altitude: '10m', distance: '120m' }
+      title: "Reconnaissance Drone Deployment",
+      description: "The primary reconnaissance drone takes off and begins scanning the area for elephant targets using thermal imaging and AI detection.",
+      scoutDronePosition: { top: '75%', left: '25%' },
+      scoutDronePath: 'M25,100 Q50,60 80,40',
+      tranqDronePosition: { top: '85%', left: '15%' }, // Standby position
+      elephantPosition: { top: '55%', left: '75%' },
+      visualizationInfo: "Scout drone scanning for elephant heat signatures. Thermal imaging active. AI pattern recognition engaged.",
+      stats: { scoutBattery: '98%', tranqBattery: '100%', altitude: '15m', targets: '0' }
     },
     {
-      title: "Approach & Target Lock",
-      description: "The drone approaches the target at a safe distance and uses advanced targeting systems to identify the optimal injection site.",
-      dronePosition: { top: '45%', left: '55%' },
-      dronePath: 'M150,40 Q200,80 220,100',
-      elephantPosition: { top: '55%', left: '70%' },
-      visualizationInfo: "Target lock acquired. Calculating optimal injection site based on muscle mass and blood flow patterns.",
-      stats: { batteryLevel: '92%', altitude: '15m', distance: '45m' }
+      title: "Target Identification & Analysis",
+      description: "The scout drone identifies the target elephant and begins detailed analysis including size estimation, health assessment, and behavioral patterns.",
+      scoutDronePosition: { top: '45%', left: '60%' },
+      scoutDronePath: 'M80,40 Q120,50 150,45',
+      tranqDronePosition: { top: '85%', left: '15%' },
+      elephantPosition: { top: '55%', left: '75%' },
+      visualizationInfo: "Target identified: Adult elephant. Weight: ~4.2 tons. Health: Good. Stress level: Moderate. Calculating optimal approach vector.",
+      stats: { scoutBattery: '94%', tranqBattery: '100%', altitude: '18m', targets: '1' }
     },
     {
-      title: "Precision Dart Deployment",
-      description: "With the target locked, the drone deploys a precision-guided tranquilizer dart with exact dosage calibration.",
-      dronePosition: { top: '45%', left: '58%' },
-      dronePath: 'M220,100 L230,105',
-      dartPath: 'M230,105 L260,130',
-      elephantPosition: { top: '55%', left: '70%' },
-      visualizationInfo: "Dart deployed. Tranquilizer dosage: 12ml. Precision confidence: 96%",
-      stats: { batteryLevel: '87%', altitude: '18m', distance: '35m' }
+      title: "Data Transfer & Tranquilizer Drone Approach",
+      description: "Scout drone transmits all collected data to the tranquilizer drone, which begins its precise approach based on the reconnaissance intelligence.",
+      scoutDronePosition: { top: '40%', left: '55%' }, // Monitoring position
+      tranqDronePosition: { top: '65%', left: '45%' }, // Approaching
+      tranqDronePath: 'M40,85 Q60,75 90,65',
+      elephantPosition: { top: '55%', left: '75%' },
+      visualizationInfo: "Data link established. Tranquilizer drone receiving target parameters. Dosage calculated: 15ml. Approach vector optimized.",
+      stats: { scoutBattery: '91%', tranqBattery: '96%', altitude: '20m', targets: '1' }
     },
     {
-      title: "Health Monitoring & Data Collection",
-      description: "After successful tranquilization, the drone monitors vital signs and transmits real-time health data to the team.",
-      dronePosition: { top: '40%', left: '65%' },
-      elephantPosition: { top: '60%', left: '70%', state: 'tranquilized' },
-      visualizationInfo: "Monitoring vital signs. Heart rate: 42 BPM. Respiration: Normal. Temperature: 36.8°C",
-      stats: { batteryLevel: '75%', altitude: '12m', distance: '30m' }
+      title: "Precision Tranquilization",
+      description: "The tranquilizer drone deploys the precisely calibrated dart while the scout drone maintains overwatch and monitoring.",
+      scoutDronePosition: { top: '40%', left: '55%' },
+      tranqDronePosition: { top: '50%', left: '60%' },
+      dartPath: 'M150,50 L185,55',
+      elephantPosition: { top: '55%', left: '75%' },
+      visualizationInfo: "Dart deployed successfully. Impact confirmed. Monitoring elephant vitals. Tranquilizer taking effect.",
+      stats: { scoutBattery: '88%', tranqBattery: '92%', altitude: '22m', targets: '1' }
+    },
+    {
+      title: "Dual Monitoring & Health Assessment",
+      description: "Both drones work in tandem to monitor the elephant's vital signs and ensure safe tranquilization while transmitting data to the ground team.",
+      scoutDronePosition: { top: '35%', left: '65%' },
+      tranqDronePosition: { top: '45%', left: '70%' },
+      elephantPosition: { top: '60%', left: '75%', state: 'tranquilized' },
+      visualizationInfo: "Elephant safely tranquilized. Dual monitoring active. Heart rate: 38 BPM. Respiration: Stable. Ground team notified.",
+      stats: { scoutBattery: '82%', tranqBattery: '87%', altitude: '15m', targets: '1' }
     }
   ];
 
@@ -135,16 +160,16 @@ const DroneDemo = () => {
       
       <div className="section-container min-h-[800px]">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">Drone Demo</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">Dual-Drone System Demo</h2>
           <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
-            Experience how the PSYC system works in the field with our interactive demonstration
+            Experience our advanced two-drone system where reconnaissance and tranquilization drones work in perfect coordination
           </p>
           
           {/* Progress bar */}
           <div className="max-w-md mx-auto mt-8 bg-black/30 h-2 rounded-full overflow-hidden">
             <div 
               className="h-full bg-psyc-orange transition-all duration-700"
-              style={{ width: `${(currentStep + 1) * 25}%` }}
+              style={{ width: `${(currentStep + 1) * 20}%` }}
             ></div>
           </div>
           
@@ -152,7 +177,7 @@ const DroneDemo = () => {
           <div className="flex items-center justify-center space-x-4 mt-4">
             <button 
               onClick={handleResetClick} 
-              className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors"
+              className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors bg-black/30 px-3 py-2 rounded-md hover:bg-black/50"
               aria-label="Restart demonstration"
             >
               <RotateCcw size={16} />
@@ -161,7 +186,7 @@ const DroneDemo = () => {
             
             <button 
               onClick={handlePlayPauseClick} 
-              className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors"
+              className="flex items-center space-x-1 text-white/70 hover:text-psyc-orange transition-colors bg-black/30 px-3 py-2 rounded-md hover:bg-black/50"
               aria-label={isPaused ? "Resume demonstration" : "Pause demonstration"}
             >
               {isPaused ? (
@@ -176,6 +201,10 @@ const DroneDemo = () => {
                 </>
               )}
             </button>
+            
+            <div className="text-xs text-white/50">
+              {isAutoMode ? 'Auto Mode' : 'Manual Mode'}
+            </div>
           </div>
         </div>
 
@@ -223,18 +252,22 @@ const DroneDemo = () => {
                   <div className="ml-11 mt-4 bg-black/40 backdrop-blur-sm p-4 rounded-lg border border-white/10 animate-fade-in cyber-border">
                     <div className="text-sm font-mono text-psyc-orange mb-2">SYSTEM OUTPUT:</div>
                     <p className="text-white/90 text-sm">{step.visualizationInfo}</p>
-                    <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-white/80 font-mono">
+                    <div className="mt-3 grid grid-cols-4 gap-2 text-xs text-white/80 font-mono">
                       <div className="flex flex-col">
-                        <span className="text-psyc-orange">BATTERY</span>
-                        <span>{step.stats.batteryLevel}</span>
+                        <span className="text-green-400">SCOUT</span>
+                        <span>{step.stats.scoutBattery}</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-psyc-orange">ALTITUDE</span>
+                        <span className="text-blue-400">TRANQ</span>
+                        <span>{step.stats.tranqBattery}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-psyc-orange">ALT</span>
                         <span>{step.stats.altitude}</span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-psyc-orange">DISTANCE</span>
-                        <span>{step.stats.distance}</span>
+                        <span className="text-amber-400">TARGETS</span>
+                        <span>{step.stats.targets}</span>
                       </div>
                     </div>
                   </div>
@@ -252,7 +285,7 @@ const DroneDemo = () => {
           <div className="relative h-[500px] bg-black/40 backdrop-blur-lg rounded-xl overflow-hidden border border-white/10 shadow-xl cyber-border">
             <div className="absolute inset-0 p-4">
               {/* Terrain background */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-psyc-darkGreen/40"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-green-900/20 to-green-800/40"></div>
               
               {/* Grid lines */}
               <div className="absolute inset-0" style={{ 
@@ -265,44 +298,96 @@ const DroneDemo = () => {
                 <div className="scan-line"></div>
               )}
               
-              {/* Trees and foliage */}
-              <div className="absolute bottom-0 left-0 w-full h-32 bg-black/40"></div>
+              {/* Trees and foliage - African savanna style */}
+              <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-green-900/60 to-transparent"></div>
               
-              {/* Drone */}
+              {/* Acacia trees */}
+              <div className="absolute bottom-5 left-[20%] w-12 h-16">
+                <svg viewBox="0 0 50 60" className="w-full h-full">
+                  <path d="M25,50 L25,20" stroke="#8B4513" strokeWidth="2" fill="none"/>
+                  <ellipse cx="25" cy="15" rx="15" ry="8" fill="#228B22" opacity="0.7"/>
+                </svg>
+              </div>
+              <div className="absolute bottom-5 right-[15%] w-10 h-14">
+                <svg viewBox="0 0 50 60" className="w-full h-full">
+                  <path d="M25,50 L25,20" stroke="#8B4513" strokeWidth="2" fill="none"/>
+                  <ellipse cx="25" cy="15" rx="12" ry="6" fill="#228B22" opacity="0.7"/>
+                </svg>
+              </div>
+              
+              {/* Scout Drone (Green) */}
               <div 
-                className={`absolute w-12 h-12 transition-all duration-1000 ease-in-out ${(currentStep === 0 || currentStep === 3) && !isPaused ? 'animate-pulse' : ''}`}
+                className={`absolute w-8 h-8 transition-all duration-1000 ease-in-out ${currentStep <= 1 && !isPaused ? 'animate-pulse' : ''}`}
                 style={{ 
-                  top: steps[currentStep].dronePosition.top, 
-                  left: steps[currentStep].dronePosition.left,
+                  top: steps[currentStep].scoutDronePosition.top, 
+                  left: steps[currentStep].scoutDronePosition.left,
                   transform: 'translate(-50%, -50%)'
                 }}
               >
                 <div className="relative">
-                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#FF6F00" strokeWidth="1.5">
-                    <path d="M12 12.5L7.5 15.5M12 12.5L16.5 15.5M12 12.5V19M7.5 15.5L4.5 13.5M7.5 15.5V19L12 22M16.5 15.5L19.5 13.5M16.5 15.5V19L12 22M4.5 13.5L2 12L4.5 10.5M4.5 13.5L7.5 11.5M19.5 13.5L22 12L19.5 10.5M19.5 13.5L16.5 11.5M4.5 10.5L7.5 8.5L12 5L16.5 8.5L19.5 10.5M7.5 8.5V11.5M16.5 8.5V11.5M12 5V8" />
+                  <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#22C55E" strokeWidth="1.5">
+                    <path d="M12 12.5L7.5 15.5M12 12.5L16.5 15.5M12 12.5V19M7.5 15.5L4.5 13.5M7.5 15.5V19L12 22M16.5 15.5L19.5 13.5M16.5 15.5V19L12 22" />
                   </svg>
                   
-                  {/* Scanning effect */}
-                  <div className={`absolute -inset-4 rounded-full bg-psyc-orange/20 ${!isPaused ? 'animate-pulse-glow' : ''}`}></div>
+                  {/* Scout scanning effect */}
+                  {currentStep <= 1 && (
+                    <div className={`absolute -inset-4 rounded-full bg-green-500/20 ${!isPaused ? 'animate-pulse-glow' : ''}`}></div>
+                  )}
                   
-                  {/* Signal waves */}
-                  {!isPaused && (
-                    <>
-                      <div className="absolute -inset-8 rounded-full border border-psyc-orange/30 opacity-0 animate-pulse" style={{ animationDelay: '0s' }}></div>
-                      <div className="absolute -inset-12 rounded-full border border-psyc-orange/20 opacity-0 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-                    </>
+                  {/* Data transmission */}
+                  {currentStep === 2 && (
+                    <div className="absolute -top-8 -right-8 text-xs text-green-400 font-mono animate-pulse">
+                      DATA TX
+                    </div>
                   )}
                 </div>
               </div>
               
-              {/* Drone path */}
-              {currentStep >= 0 && currentStep < 3 && (
+              {/* Tranquilizer Drone (Blue) */}
+              <div 
+                className={`absolute w-10 h-10 transition-all duration-1000 ease-in-out ${currentStep >= 2 && currentStep <= 3 && !isPaused ? 'animate-pulse' : ''}`}
+                style={{ 
+                  top: steps[currentStep].tranqDronePosition.top, 
+                  left: steps[currentStep].tranqDronePosition.left,
+                  transform: 'translate(-50%, -50%)'
+                }}
+              >
+                <div className="relative">
+                  <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#3B82F6" strokeWidth="1.5">
+                    <path d="M12 12.5L7.5 15.5M12 12.5L16.5 15.5M12 12.5V19M7.5 15.5L4.5 13.5M7.5 15.5V19L12 22M16.5 15.5L19.5 13.5M16.5 15.5V19L12 22" />
+                    <circle cx="12" cy="8" r="3" stroke="#3B82F6" strokeWidth="1"/>
+                  </svg>
+                  
+                  {/* Tranq drone active effect */}
+                  {currentStep >= 2 && (
+                    <div className={`absolute -inset-6 rounded-full bg-blue-500/20 ${!isPaused ? 'animate-pulse-glow' : ''}`}></div>
+                  )}
+                </div>
+              </div>
+              
+              {/* Scout drone path */}
+              {currentStep >= 0 && currentStep < 3 && steps[currentStep].scoutDronePath && (
                 <svg className="absolute inset-0 w-full h-full">
                   <path 
-                    d={steps[currentStep].dronePath} 
-                    stroke="#FF6F00" 
-                    strokeWidth="2" 
-                    strokeDasharray="5 3"
+                    d={steps[currentStep].scoutDronePath} 
+                    stroke="#22C55E" 
+                    strokeWidth="1.5" 
+                    strokeDasharray="4 2"
+                    fill="none"
+                    className={`drone-path ${!isPaused ? '' : 'animation-paused'}`}
+                    opacity="0.6"
+                  />
+                </svg>
+              )}
+              
+              {/* Tranquilizer drone path */}
+              {currentStep >= 2 && currentStep < 4 && steps[currentStep].tranqDronePath && (
+                <svg className="absolute inset-0 w-full h-full">
+                  <path 
+                    d={steps[currentStep].tranqDronePath} 
+                    stroke="#3B82F6" 
+                    strokeWidth="1.5" 
+                    strokeDasharray="3 1"
                     fill="none"
                     className={`drone-path ${!isPaused ? '' : 'animation-paused'}`}
                     opacity="0.7"
@@ -311,7 +396,7 @@ const DroneDemo = () => {
               )}
               
               {/* Dart trajectory */}
-              {currentStep === 2 && (
+              {currentStep === 3 && (
                 <svg className="absolute inset-0 w-full h-full">
                   <path 
                     d={steps[currentStep].dartPath} 
@@ -322,7 +407,7 @@ const DroneDemo = () => {
                     className={`drone-path ${!isPaused ? '' : 'animation-paused'}`}
                     opacity="0.9"
                   />
-                  <circle cx="260" cy="130" r="4" fill="#FFB74D" className={!isPaused ? 'animate-pulse-glow' : ''} />
+                  <circle cx="185" cy="55" r="3" fill="#FFB74D" className={!isPaused ? 'animate-pulse-glow' : ''} />
                 </svg>
               )}
               
@@ -335,87 +420,136 @@ const DroneDemo = () => {
                   transform: 'translate(-50%, -50%)'
                 }}
               >
-                <div className={`w-24 h-24 relative ${currentStep === 3 ? 'opacity-70' : 'opacity-100'}`}>
-                  <svg viewBox="0 0 100 100" width="100" height="100">
-                    <path d="M85,50c0,19.33-15.67,35-35,35s-35-15.67-35-35s15.67-35,35-35S85,30.67,85,50z" fill="#8B5A2B" />
-                    <ellipse cx="50" cy="60" rx="15" ry="10" fill="#654321" opacity="0.5" />
-                    <path d="M30,40c0,0,5-15,20-15s20,15,20,15" fill="none" stroke="#654321" strokeWidth="2" />
-                    <circle cx="40" cy="40" r="3" fill="#000" />
-                    <circle cx="60" cy="40" r="3" fill="#000" />
+                <div className={`w-32 h-24 relative ${currentStep === 4 ? 'opacity-70' : 'opacity-100'}`}>
+                  {/* Elephant SVG */}
+                  <svg viewBox="0 0 120 90" width="120" height="90">
+                    {/* Body */}
+                    <ellipse cx="60" cy="50" rx="30" ry="20" fill="#8B7355"/>
+                    {/* Head */}
+                    <ellipse cx="45" cy="35" rx="18" ry="15" fill="#8B7355"/>
+                    {/* Trunk */}
+                    <path d="M35,40 Q25,50 28,65 Q30,70 35,68 Q32,55 40,45" fill="#8B7355"/>
+                    {/* Ears */}
+                    <ellipse cx="35" cy="30" rx="12" ry="18" fill="#A0926B"/>
+                    <ellipse cx="55" cy="30" rx="10" ry="15" fill="#A0926B"/>
+                    {/* Eyes */}
+                    <circle cx="40" cy="30" r="2" fill="#000"/>
+                    <circle cx="50" cy="30" r="2" fill="#000"/>
+                    {/* Legs */}
+                    <rect x="40" y="65" width="6" height="15" fill="#8B7355"/>
+                    <rect x="50" y="65" width="6" height="15" fill="#8B7355"/>
+                    <rect x="65" y="65" width="6" height="15" fill="#8B7355"/>
+                    <rect x="75" y="65" width="6" height="15" fill="#8B7355"/>
+                    {/* Tail */}
+                    <path d="M85,50 Q95,52 90,60" stroke="#8B7355" strokeWidth="3" fill="none"/>
                   </svg>
                   
                   {/* Targeting overlay */}
                   {currentStep >= 1 && currentStep < 3 && (
                     <div className="absolute inset-0 pointer-events-none">
-                      <svg viewBox="0 0 100 100" width="100" height="100">
-                        <circle cx="50" cy="50" r="40" stroke="#FF6F00" strokeWidth="1" fill="none" strokeDasharray="5 3" className={!isPaused ? 'animate-rotate-slow' : ''} />
-                        <circle cx="50" cy="50" r="30" stroke="#FF6F00" strokeWidth="1" fill="none" strokeDasharray="3 2" className={!isPaused ? 'animate-rotate-slow' : ''} style={{ animationDirection: 'reverse' }} />
-                        <circle cx="50" cy="50" r="20" stroke="#FF6F00" strokeWidth="1" fill="none" strokeDasharray="2 1" className={!isPaused ? 'animate-rotate-slow' : ''} />
-                        <circle cx="55" cy="45" r="5" stroke="#FF6F00" strokeWidth="2" fill="none" className={!isPaused ? 'animate-pulse-glow' : ''} />
-                        <path d="M55,40 L55,35 M60,45 L65,45" stroke="#FF6F00" strokeWidth="1" />
+                      <svg viewBox="0 0 120 90" width="120" height="90">
+                        <circle cx="60" cy="45" r="35" stroke="#FF6F00" strokeWidth="1" fill="none" strokeDasharray="5 3" className={!isPaused ? 'animate-rotate-slow' : ''} />
+                        <circle cx="60" cy="45" r="25" stroke="#22C55E" strokeWidth="1" fill="none" strokeDasharray="3 2" className={!isPaused ? 'animate-rotate-slow' : ''} style={{ animationDirection: 'reverse' }} />
+                        <circle cx="55" cy="40" r="8" stroke="#FF6F00" strokeWidth="2" fill="none" className={!isPaused ? 'animate-pulse-glow' : ''} />
+                        <path d="M55,32 L55,27 M63,40 L68,40" stroke="#FF6F00" strokeWidth="1" />
                       </svg>
                     </div>
                   )}
                   
+                  {/* Weight estimation overlay */}
+                  {currentStep === 1 && (
+                    <div className="absolute -top-12 -left-16 bg-black/70 backdrop-blur-md rounded-lg p-2 border border-white/10 text-xs font-mono text-green-400 animate-fade-in">
+                      <div>ANALYSIS:</div>
+                      <div>Weight: 4.2T</div>
+                      <div>Age: Adult</div>
+                      <div>Health: Good</div>
+                    </div>
+                  )}
+                  
                   {/* Dart impact */}
-                  {currentStep === 2 && (
-                    <div className="absolute top-1/3 right-1/3 w-8 h-8">
-                      <svg viewBox="0 0 24 24" width="32" height="32">
-                        <circle cx="12" cy="12" r="12" fill="#FF6F00" opacity="0.7" className={!isPaused ? 'animate-pulse' : ''} />
-                        <circle cx="12" cy="12" r="6" fill="#FFB74D" />
+                  {currentStep === 3 && (
+                    <div className="absolute top-1/3 right-1/4 w-6 h-6">
+                      <svg viewBox="0 0 24 24" width="24" height="24">
+                        <circle cx="12" cy="12" r="8" fill="#FF6F00" opacity="0.7" className={!isPaused ? 'animate-pulse' : ''} />
+                        <circle cx="12" cy="12" r="4" fill="#FFB74D" />
                       </svg>
                     </div>
                   )}
                   
                   {/* Successful tranquilization */}
-                  {currentStep === 3 && (
+                  {currentStep === 4 && (
                     <div className="absolute inset-0 pointer-events-none">
-                      <svg viewBox="0 0 100 100" width="100" height="100">
-                        <circle cx="50" cy="50" r="40" stroke="#FFB74D" strokeWidth="1" fill="none" />
-                        <path d="M35,50 L45,60 L65,40" stroke="#FFB74D" strokeWidth="3" fill="none" />
+                      <svg viewBox="0 0 120 90" width="120" height="90">
+                        <circle cx="60" cy="45" r="35" stroke="#22C55E" strokeWidth="1" fill="none" />
+                        <path d="M45,45 L55,55 L75,35" stroke="#22C55E" strokeWidth="3" fill="none" />
                       </svg>
                     </div>
                   )}
                   
-                  {/* Health monitoring */}
-                  {currentStep === 3 && (
-                    <div className="absolute -top-12 -right-24 bg-black/70 backdrop-blur-md rounded-lg p-3 border border-white/10 text-xs font-mono text-green-400 animate-fade-in cyber-border">
-                      <div>VITALS:</div>
+                  {/* Dual health monitoring */}
+                  {currentStep === 4 && (
+                    <div className="absolute -top-16 -right-24 bg-black/70 backdrop-blur-md rounded-lg p-3 border border-white/10 text-xs font-mono text-green-400 animate-fade-in cyber-border">
+                      <div className="text-psyc-orange">DUAL MONITOR:</div>
                       <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-1">
-                        <div>♥ 42 BPM</div>
-                        <div>O₂ 98%</div>
-                        <div>TEMP 36.8°C</div>
-                        <div>STATUS OK</div>
+                        <div>♥ 38 BPM</div>
+                        <div>O₂ 96%</div>
+                        <div>TEMP 36.2°C</div>
+                        <div>STABLE</div>
                       </div>
                     </div>
                   )}
                 </div>
               </div>
               
+              {/* Data link visualization */}
+              {currentStep === 2 && (
+                <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                  <line 
+                    x1="55%" y1="40%" 
+                    x2="45%" y2="65%" 
+                    stroke="#00D4FF" 
+                    strokeWidth="2" 
+                    strokeDasharray="2 2"
+                    className={!isPaused ? 'animate-pulse' : ''}
+                    opacity="0.8"
+                  />
+                  <text x="50%" y="52%" fill="#00D4FF" fontSize="8" textAnchor="middle" className="font-mono">
+                    DATA LINK
+                  </text>
+                </svg>
+              )}
+              
               {/* Interface overlays */}
               <div className="absolute top-2 left-2 right-2 flex justify-between text-xs font-mono text-psyc-orange border-b border-psyc-orange/20 pb-1">
-                <div className="flex items-center">
-                  <div className={`w-2 h-2 rounded-full bg-psyc-orange ${!isPaused ? 'animate-pulse' : ''} mr-1`}></div> 
-                  PSYC DRONE #D42-7
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <div className={`w-2 h-2 rounded-full bg-green-500 ${!isPaused ? 'animate-pulse' : ''} mr-1`}></div> 
+                    SCOUT-D1
+                  </div>
+                  <div className="flex items-center">
+                    <div className={`w-2 h-2 rounded-full bg-blue-500 ${!isPaused ? 'animate-pulse' : ''} mr-1`}></div> 
+                    TRANQ-D2
+                  </div>
                 </div>
-                <div className={!isPaused ? 'animate-pulse' : ''}>● LIVE FEED</div>
-              </div>
-              
-              {/* Distance marker */}
-              <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 bg-black/70 backdrop-blur-md px-3 py-1 rounded-md text-xs text-white font-mono border border-white/10">
-                DISTANCE: {steps[currentStep].stats.distance}
+                <div className={!isPaused ? 'animate-pulse' : ''}>
+                  {isPaused ? '⏸ PAUSED' : '● LIVE FEED'}
+                </div>
               </div>
               
               {/* Coordinates */}
               <div className="absolute bottom-3 left-3 bg-black/60 px-2 py-1 rounded text-xs text-white/70 font-mono">
-                LAT: 2°31'12"S LON: 34°49'55"E
+                SERENGETI: 2°31'12"S 34°49'55"E
               </div>
               
-              {/* Status indicators */}
+              {/* Mission status */}
               <div className="absolute top-2 right-3 flex flex-col items-end space-y-1">
                 <div className="px-2 py-1 bg-black/60 rounded text-xs font-mono flex items-center">
-                  <span className={`w-2 h-2 rounded-full bg-green-500 mr-1 ${!isPaused ? 'pulse' : ''}`}></span>
-                  <span className="text-white/80">{isPaused ? "SYSTEM PAUSED" : "SYSTEM OPTIMAL"}</span>
+                  <span className={`w-2 h-2 rounded-full ${isPaused ? 'bg-yellow-500' : 'bg-green-500'} mr-1 ${!isPaused ? 'animate-pulse' : ''}`}></span>
+                  <span className="text-white/80">
+                    {isPaused ? "MISSION PAUSED" : 
+                     currentStep === 4 ? "MISSION SUCCESS" : 
+                     "MISSION ACTIVE"}
+                  </span>
                 </div>
               </div>
             </div>
