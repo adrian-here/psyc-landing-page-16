@@ -18,6 +18,21 @@ const HeroSection = () => {
     scrollToSection('demo');
   };
 
+  const handleLearnMore = () => {
+    scrollToSection('features');
+  };
+
+  const handleContactUs = () => {
+    // Navigate to contact section or external contact page
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // If no contact section, scroll to CTA section
+      scrollToSection('cta');
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background video (placeholder for now) */}
@@ -37,20 +52,19 @@ const HeroSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8 md:mt-12 animate-fade-in">
-          <Button 
-            className="btn-primary w-full sm:w-auto"
-            onClick={() => scrollToSection('features')}
+          <button 
+            className="btn-primary w-full sm:w-auto px-8 py-3 bg-psyc-orange hover:bg-psyc-orange/90 text-white font-medium rounded-lg transition-all duration-300"
+            onClick={handleLearnMore}
           >
             Discover Our Approach
-          </Button>
-          <Button 
-            variant="outline" 
-            className="btn-secondary w-full sm:w-auto flex items-center justify-center space-x-2"
+          </button>
+          <button 
+            className="btn-secondary w-full sm:w-auto flex items-center justify-center space-x-2 px-8 py-3 border border-psyc-orange text-psyc-orange hover:bg-psyc-orange hover:text-white font-medium rounded-lg transition-all duration-300"
             onClick={handleWatchVideo}
           >
             <Play size={18} className="mr-2" />
             <span>Watch the Drone in Action</span>
-          </Button>
+          </button>
         </div>
         
         <div 

@@ -7,7 +7,7 @@ import FeaturesSection from '@/components/FeaturesSection';
 import DroneDemo from '@/components/DroneDemo';
 import TestimonialSection from '@/components/TestimonialSection';
 import StatsSection from '@/components/StatsSection';
-import CompetitiveEdge from '@/components/CompetitiveEdge';
+import PartnersSection from '@/components/PartnersSection';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
 import ThreeDBackground from '@/components/ThreeDBackground';
@@ -42,10 +42,14 @@ const Index = () => {
           <div id="features">
             <FeaturesSection />
           </div>
-          <DroneDemo />
+          <div id="demo">
+            <DroneDemo />
+          </div>
           <TestimonialSection />
           <StatsSection />
-          <CompetitiveEdge />
+          <div id="partners">
+            <PartnersSection />
+          </div>
           <CTASection />
           <Footer />
         </main>
