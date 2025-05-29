@@ -5,6 +5,12 @@ import Footer from '@/components/Footer';
 import ThreeDBackground from '@/components/ThreeDBackground';
 import VideoCard from '@/components/VideoCard';
 
+type VideoData = {
+  url: string;
+  title: string;
+  available?: boolean;
+};
+
 const Blogs = () => {
   const extractVideoId = (url: string): string => {
     const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&\n?#]+)/);
