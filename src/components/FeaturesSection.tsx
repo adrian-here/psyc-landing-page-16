@@ -101,6 +101,43 @@ const FeaturesSection = () => {
     }
   ];
 
+  const versatileApplications = [
+    {
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 3h18v18H3zM9 9h6v6H9z"></path>
+          <path d="M3 9h6M15 9h6M9 3v6M9 15v6"></path>
+        </svg>
+      ),
+      title: "Disaster Response & Emergency Assessment",
+      description: "Aerial surveillance and rapid damage assessment in disaster-affected areas.",
+      expandedContent: "Our drones provide critical aerial surveillance capabilities during natural disasters, offering real-time damage assessment, search and rescue support, and emergency response coordination. The system can quickly map affected areas, identify survivors, assess infrastructure damage, and provide vital intelligence to emergency response teams, significantly improving response times and resource allocation."
+    },
+    {
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 17 17 2l4 4L6 21l-4-4z"></path>
+          <path d="M14 8l4 4"></path>
+          <circle cx="8" cy="16" r="2"></circle>
+        </svg>
+      ),
+      title: "Tiger Monitoring & Big Cat Conservation",
+      description: "Advanced tracking and monitoring systems for endangered big cat species.",
+      expandedContent: "Specialized for tiger conservation efforts, our technology enables non-invasive monitoring of tiger populations, territory mapping, and behavioral studies. The system can track individual tigers using unique stripe patterns, monitor their health from a distance, and provide critical data for conservation programs. This extends to other big cats including leopards, jaguars, and snow leopards."
+    },
+    {
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      ),
+      title: "Multi-Species Wildlife Management",
+      description: "Adaptable technology for various wildlife species and conservation scenarios.",
+      expandedContent: "Beyond elephants and tigers, our versatile platform can be adapted for monitoring and managing various wildlife species including rhinos, bears, large ungulates, and marine mammals. The modular design allows for species-specific modifications while maintaining core functionality, making it a comprehensive solution for global wildlife conservation efforts and research initiatives."
+    }
+  ];
+
   return (
     <section id="features" ref={sectionRef} className="py-20 md:py-32 bg-gradient-to-b from-[#1a1a2e] to-[#121420] text-white relative overflow-hidden">
       {/* Animated background grid */}
@@ -152,7 +189,7 @@ const FeaturesSection = () => {
           </div>
         </div>
 
-        <div>
+        <div className="mb-16">
           <motion.h3 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -20 }}
@@ -172,6 +209,31 @@ const FeaturesSection = () => {
                 expandedContent={feature.expandedContent}
                 className={`opacity-0 ${isVisible ? 'animate-fade-in' : ''}`}
                 style={{ animationDelay: `${(index + 3) * 200}ms`, animationFillMode: 'forwards' }}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <motion.h3 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -20 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="text-2xl font-bold mb-8 text-psyc-orange flex items-center"
+          >
+            <span className="bg-psyc-orange/20 p-2 rounded-lg mr-3">03</span>
+            Versatile Applications Beyond Wildlife Management
+          </motion.h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {versatileApplications.map((feature, index) => (
+              <FeatureCard
+                key={index}
+                icon={feature.icon}
+                title={feature.title}
+                description={feature.description}
+                expandedContent={feature.expandedContent}
+                className={`opacity-0 ${isVisible ? 'animate-fade-in' : ''}`}
+                style={{ animationDelay: `${(index + 6) * 200}ms`, animationFillMode: 'forwards' }}
               />
             ))}
           </div>
