@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
@@ -25,12 +24,30 @@ const CTASection = () => {
     e.preventDefault();
     setFormState('submitting');
     
-    // Simulate form submission
+    // Create email content
+    const emailSubject = `PSYC Contact Form - ${formData.interest}`;
+    const emailBody = `
+Name: ${formData.name}
+Email: ${formData.email}
+Organization: ${formData.organization}
+Interest: ${formData.interest}
+
+Message:
+${formData.message}
+    `;
+    
+    // Create mailto link
+    const mailtoLink = `mailto:adrianronan7305@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    
+    // Simulate processing time
     setTimeout(() => {
+      // Open default email client
+      window.location.href = mailtoLink;
+      
       setFormState('success');
       toast({
-        title: "Message sent successfully",
-        description: "We'll get back to you within 48 hours.",
+        title: "Email client opened",
+        description: "Your default email client should open with the pre-filled message. For automatic sending, please connect to Supabase.",
       });
       
       // Reset form after successful submission
@@ -44,7 +61,7 @@ const CTASection = () => {
         });
         setFormState('idle');
       }, 3000);
-    }, 1500);
+    }, 1000);
   };
 
   return (
@@ -76,6 +93,14 @@ const CTASection = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className="space-y-6">
               <h3 className="text-2xl font-bold text-psyc-orange">Contact Us</h3>
+              
+              {/* Email notice */}
+              <div className="bg-psyc-orange/10 border border-psyc-orange/30 rounded-lg p-4 mb-4">
+                <p className="text-sm text-white/80">
+                  <strong>Note:</strong> This form will open your email client. For automatic email sending, 
+                  connect to Supabase for backend functionality.
+                </p>
+              </div>
               
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-3">
@@ -172,13 +197,13 @@ const CTASection = () => {
                   {formState === 'submitting' && (
                     <>
                       <Loader2 size={18} className="animate-spin" />
-                      <span>Sending...</span>
+                      <span>Opening Email Client...</span>
                     </>
                   )}
                   {formState === 'success' && (
                     <>
                       <Check size={18} />
-                      <span>Message Sent!</span>
+                      <span>Email Client Opened!</span>
                     </>
                   )}
                 </Button>

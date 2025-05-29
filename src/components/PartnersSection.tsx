@@ -102,7 +102,7 @@ const PartnersSection = () => {
                   <img 
                     src={partner.logo} 
                     alt={`${partner.name} logo`}
-                    className="max-w-full max-h-full object-contain filter brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-300"
+                    className="max-w-full max-h-full object-contain transition-all duration-300"
                   />
                 </div>
                 <h3 className="text-2xl font-bold text-psyc-orange mb-4">{partner.name}</h3>
