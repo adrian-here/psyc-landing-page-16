@@ -2,10 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +24,20 @@ const Navbar = () => {
     };
   }, []);
 
+  const scrollToSection = (sectionId: string) => {
+    if (location.pathname !== '/') {
+      // If not on home page, navigate to home first
+      window.location.href = `/#${sectionId}`;
+      return;
+    }
+    
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+    setMobileMenuOpen(false);
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -33,31 +49,34 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center">
-            <a href="#" className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-2">
               <div className="w-10 h-10 rounded-full bg-psyc-green flex items-center justify-center">
                 <span className="text-white font-bold text-xl">P</span>
               </div>
               <span className="text-white font-bold text-xl">PSYC</span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Menu */}
           <nav className="hidden md:flex space-x-8">
-            <a href="#about" className="text-white/90 hover:text-white transition-colors">
+            <button onClick={() => scrollToSection('about')} className="text-white/90 hover:text-white transition-colors">
               About
-            </a>
-            <a href="#solutions" className="text-white/90 hover:text-white transition-colors">
+            </button>
+            <button onClick={() => scrollToSection('problem-solution')} className="text-white/90 hover:text-white transition-colors">
               Solutions
-            </a>
-            <a href="#features" className="text-white/90 hover:text-white transition-colors">
+            </button>
+            <button onClick={() => scrollToSection('features')} className="text-white/90 hover:text-white transition-colors">
               Features
-            </a>
-            <a href="#demo" className="text-white/90 hover:text-white transition-colors">
+            </button>
+            <button onClick={() => scrollToSection('demo')} className="text-white/90 hover:text-white transition-colors">
               Drone Demo
-            </a>
-            <a href="#testimonials" className="text-white/90 hover:text-white transition-colors">
+            </button>
+            <button onClick={() => scrollToSection('testimonials')} className="text-white/90 hover:text-white transition-colors">
               Testimonials
-            </a>
+            </button>
+            <Link to="/blogs" className="text-white/90 hover:text-white transition-colors">
+              Blogs
+            </Link>
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
@@ -81,41 +100,43 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-psyc-darkGreen/95 backdrop-blur-md">
           <div className="px-4 py-2 space-y-1">
-            <a
-              href="#about"
-              className="block py-2 text-white hover:text-psyc-gold"
-              onClick={() => setMobileMenuOpen(false)}
+            <button
+              onClick={() => scrollToSection('about')}
+              className="block py-2 text-white hover:text-psyc-gold w-full text-left"
             >
               About
-            </a>
-            <a
-              href="#solutions"
-              className="block py-2 text-white hover:text-psyc-gold"
-              onClick={() => setMobileMenuOpen(false)}
+            </button>
+            <button
+              onClick={() => scrollToSection('problem-solution')}
+              className="block py-2 text-white hover:text-psyc-gold w-full text-left"
             >
               Solutions
-            </a>
-            <a
-              href="#features"
-              className="block py-2 text-white hover:text-psyc-gold"
-              onClick={() => setMobileMenuOpen(false)}
+            </button>
+            <button
+              onClick={() => scrollToSection('features')}
+              className="block py-2 text-white hover:text-psyc-gold w-full text-left"
             >
               Features
-            </a>
-            <a
-              href="#demo"
-              className="block py-2 text-white hover:text-psyc-gold"
-              onClick={() => setMobileMenuOpen(false)}
+            </button>
+            <button
+              onClick={() => scrollToSection('demo')}
+              className="block py-2 text-white hover:text-psyc-gold w-full text-left"
             >
               Drone Demo
-            </a>
-            <a
-              href="#testimonials"
+            </button>
+            <button
+              onClick={() => scrollToSection('testimonials')}
+              className="block py-2 text-white hover:text-psyc-gold w-full text-left"
+            >
+              Testimonials
+            </button>
+            <Link
+              to="/blogs"
               className="block py-2 text-white hover:text-psyc-gold"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Testimonials
-            </a>
+              Blogs
+            </Link>
             <div className="pt-2">
               <Button className="w-full bg-psyc-orange hover:bg-psyc-orange/90 text-white">
                 Contact Us
