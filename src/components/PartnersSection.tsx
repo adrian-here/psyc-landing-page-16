@@ -22,10 +22,10 @@ interface KeyPerson {
 const PartnersSection = () => {
   const partners: Partner[] = [
     {
-      name: "AICDSU",
+      name: "IIT Madras",
       logo: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=200&h=100&fit=crop&crop=center",
       description: "Leading technology research institute focused on AI and drone innovations",
-      website: "https://aicdsu.edu"
+      website: "https://www.iitm.ac.in"
     },
     {
       name: "Dayananda Sagar University",
@@ -37,20 +37,18 @@ const PartnersSection = () => {
 
   const keyPersons: KeyPerson[] = [
     {
-      name: "Dr. Rajesh Kumar",
-      role: "Director of Research",
-      company: "AICDSU",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      email: "rajesh.kumar@aicdsu.edu",
-      linkedin: "https://linkedin.com/in/rajeshkumar"
+      name: "Dr. Prashantha Kumar H G",
+      role: "Postdoctoral Researcher (DST-SERB)",
+      company: "IIT Madras",
+      image: "/lovable-uploads/6b61d1b2-cf3d-4785-9804-3eb4e1b03c76.png",
+      linkedin: "https://www.linkedin.com/in/dr-prashantha-kumar-h-g-6547b1102/"
     },
     {
-      name: "Prof. Priya Sharma",
-      role: "Dean of Engineering",
-      company: "Dayananda Sagar University",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b1e0?w=150&h=150&fit=crop&crop=face",
-      email: "priya.sharma@dsu.edu.in",
-      linkedin: "https://linkedin.com/in/priyasharma"
+      name: "Dr. Sridhar S K",
+      role: "Associate Professor",
+      company: "DSU Bangalore",
+      image: "/lovable-uploads/b73bee17-5a8a-4358-b81d-259b48aca8b8.png",
+      linkedin: "https://www.linkedin.com/in/dr-sridhar-s-k-599283229/"
     }
   ];
 

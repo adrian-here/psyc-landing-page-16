@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
@@ -264,7 +265,7 @@ const ProblemSolutionSection = () => {
               className="rounded-xl overflow-hidden shadow-2xl"
             >
               <img
-                src={activeTab === 'problem' ? "/images/traditional-method.jpg" : "/images/psyc-drone-solution.jpg"}
+                src={activeTab === 'problem' ? "/lovable-uploads/5c2b1e3c-fae7-4490-a5b7-7a979c764c8e.png" : "/lovable-uploads/113fd233-680b-4a12-a3ee-428843586bc8.png"}
                 alt={activeTab === 'problem' ? "Traditional elephant tranquilization" : "PSYC drone solution"}
                 className="w-full aspect-[4/3] object-cover"
               />

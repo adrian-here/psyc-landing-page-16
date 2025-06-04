@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { CheckCircle, XCircle, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -123,9 +122,23 @@ const CompetitiveEdge = () => {
   ];
 
   return (
-    <section className="py-20 md:py-32 bg-[#0F131A] text-white relative overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgc3Ryb2tlPSIjRkY2RjAwIiBzdHJva2Utd2lkdGg9IjAuNSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiIGN4PSIzMCIgY3k9IjMwIiByPSIyOSIvPjwvZz48L3N2Zz4=')] opacity-10"></div>
+    <section className="py-20 md:py-32 bg-gradient-to-br from-slate-900 via-[#0F131A] to-black text-white relative overflow-hidden">
+      {/* Enhanced background patterns */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Animated gradient orbs */}
+        <div className="absolute top-10 left-10 w-96 h-96 bg-gradient-to-r from-psyc-orange/10 to-amber-400/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-blue-500/5 to-psyc-orange/10 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
+        <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-psyc-orange/8 rounded-full blur-2xl animate-pulse animation-delay-1000"></div>
+        
+        {/* Tech grid pattern */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMCBoNDAgdjQwIEgwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDExMSwgMCwgMC4wMykiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9zdmc+')] opacity-20"></div>
+        
+        {/* Subtle moving lines */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-psyc-orange/20 to-transparent animate-pulse"></div>
+          <div className="absolute top-3/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/10 to-transparent animate-pulse animation-delay-1000"></div>
+        </div>
+      </div>
       
       <div className="section-container relative z-10">
         <motion.div
@@ -136,7 +149,9 @@ const CompetitiveEdge = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6 relative inline-block">
-            <span className="text-gradient">Competitive Edge</span>
+            <span className="text-gradient bg-gradient-to-r from-white via-psyc-orange to-amber-300 bg-clip-text text-transparent">
+              Competitive Edge
+            </span>
             <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-psyc-orange to-transparent"></div>
           </h2>
           <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
@@ -149,10 +164,13 @@ const CompetitiveEdge = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true, amount: 0.2 }}
-          className="bg-black/40 backdrop-blur-sm rounded-xl overflow-hidden border border-psyc-orange/20 cyber-border"
+          className="bg-black/50 backdrop-blur-sm rounded-xl overflow-hidden border border-psyc-orange/30 shadow-2xl"
+          style={{
+            background: 'linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(15,19,26,0.8) 50%, rgba(0,0,0,0.6) 100%)'
+          }}
         >
           {/* Table header */}
-          <div className="grid grid-cols-7 bg-gradient-to-r from-black/80 via-black/60 to-black/80 text-white font-bold">
+          <div className="grid grid-cols-7 bg-gradient-to-r from-black/80 via-slate-800/60 to-black/80 text-white font-bold border-b border-psyc-orange/20">
             <div className="p-4 border-r border-white/10 col-span-3">Feature</div>
             <div className="p-4 text-center border-r border-white/10 col-span-2">PSYC Drone Solution</div>
             <div className="p-4 text-center col-span-2">Traditional Methods</div>
@@ -162,8 +180,8 @@ const CompetitiveEdge = () => {
           {comparisonData.map((item, index) => (
             <React.Fragment key={item.feature}>
               <div 
-                className={`grid grid-cols-7 border-t border-white/10 cursor-pointer hover:bg-black/40 transition-colors duration-200 ${
-                  selectedFeature === item.feature ? 'bg-black/40' : ''
+                className={`grid grid-cols-7 border-t border-white/10 cursor-pointer hover:bg-gradient-to-r hover:from-black/60 hover:via-slate-800/40 hover:to-black/60 transition-all duration-300 ${
+                  selectedFeature === item.feature ? 'bg-gradient-to-r from-black/60 via-slate-800/40 to-black/60' : ''
                 }`}
                 onClick={() => setSelectedFeature(selectedFeature === item.feature ? null : item.feature)}
               >
@@ -200,19 +218,19 @@ const CompetitiveEdge = () => {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="grid grid-cols-7 bg-gradient-to-r from-black/60 via-black/40 to-black/60 border-t border-white/10"
+                  className="grid grid-cols-7 bg-gradient-to-r from-slate-800/40 via-black/60 to-slate-800/40 border-t border-white/10"
                 >
                   <div className="p-4 border-r border-white/10 font-medium text-psyc-orange flex items-center col-span-3">
                     <Info size={16} className="mr-2" />
                     Detailed Comparison
                   </div>
                   <div className="p-4 border-r border-white/10 text-white/80 text-sm col-span-2">
-                    <div className="bg-black/30 rounded-lg p-3 border border-psyc-orange/20">
+                    <div className="bg-gradient-to-br from-black/50 to-slate-800/30 rounded-lg p-3 border border-psyc-orange/20">
                       {item.psycDetail}
                     </div>
                   </div>
                   <div className="p-4 text-white/80 text-sm col-span-2">
-                    <div className="bg-black/30 rounded-lg p-3 border border-white/10">
+                    <div className="bg-gradient-to-br from-black/50 to-slate-800/30 rounded-lg p-3 border border-white/10">
                       {item.traditionalDetail}
                     </div>
                   </div>
@@ -227,7 +245,7 @@ const CompetitiveEdge = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           viewport={{ once: true, amount: 0.8 }}
-          className="mt-10 text-center bg-gradient-to-r from-black/60 via-black/40 to-black/60 p-6 rounded-xl border border-psyc-orange/20"
+          className="mt-10 text-center bg-gradient-to-r from-black/60 via-slate-800/40 to-black/60 p-6 rounded-xl border border-psyc-orange/20 backdrop-blur-sm"
         >
           <p className="text-white/90 italic max-w-3xl mx-auto">
             "The comparison is clear: PSYC's technology represents a quantum leap forward in wildlife tranquilization safety, 
