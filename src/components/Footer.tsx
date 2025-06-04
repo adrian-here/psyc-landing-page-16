@@ -1,7 +1,5 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
 
 const Footer = () => {
@@ -18,7 +16,7 @@ const Footer = () => {
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMCBoNDAgdjQwIEgwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDExMSwgMCwgMC4wMykiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9zdmc+')] opacity-30"></div>
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -102,51 +100,12 @@ const Footer = () => {
               ))}
             </ul>
           </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="font-bold text-lg mb-4 text-gradient">Newsletter</h3>
-            <p className="text-white/70 mb-4">Stay updated on our latest innovations and conservation initiatives.</p>
-            <div className="flex space-x-2 mb-4">
-              <Input 
-                type="email" 
-                placeholder="Your email" 
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-psyc-orange focus:ring-psyc-orange/50" 
-              />
-              <Button className="bg-gradient-to-r from-psyc-orange to-amber-400 hover:from-amber-400 hover:to-psyc-orange text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-                Subscribe
-              </Button>
-            </div>
-            <div className="flex items-center space-x-4 text-white/60">
-              <span className="text-sm">Download our app:</span>
-              <div className="flex space-x-2">
-                <motion.a 
-                  href="#" 
-                  whileHover={{ scale: 1.05 }}
-                  className="px-3 py-1 bg-white/10 rounded-lg text-xs hover:bg-psyc-orange/20 transition-colors"
-                >
-                  iOS
-                </motion.a>
-                <motion.a 
-                  href="#" 
-                  whileHover={{ scale: 1.05 }}
-                  className="px-3 py-1 bg-white/10 rounded-lg text-xs hover:bg-psyc-orange/20 transition-colors"
-                >
-                  Android
-                </motion.a>
-              </div>
-            </div>
-          </motion.div>
         </div>
         
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
           viewport={{ once: true }}
           className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center"
         >
@@ -163,7 +122,7 @@ const Footer = () => {
                 className="hover:text-psyc-orange transition-colors"
               >
                 {link}
-              </motion.a>
+              </a>
             ))}
           </div>
         </motion.div>
