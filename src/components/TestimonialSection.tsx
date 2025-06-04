@@ -8,20 +8,17 @@ const testimonials = [
   {
     quote: "PSYC's drone technology has completely transformed how we approach elephant tranquilization. The precision and safety improvements are remarkable.",
     author: "Dr. Sarah Johnson",
-    role: "Wildlife Veterinarian, Kenya Wildlife Service",
-    image: "/images/testimonial1.jpg"
+    role: "Wildlife Veterinarian, Kenya Wildlife Service"
   },
   {
     quote: "After implementing PSYC's system, we've seen a 94% reduction in staff injuries during operations and significantly reduced stress in our animal subjects.",
     author: "Michael Omondi",
-    role: "Conservation Director, East African Wildlife Trust",
-    image: "/images/testimonial2.jpg"
+    role: "Conservation Director, East African Wildlife Trust"
   },
   {
     quote: "The data we're able to collect with PSYC drones has advanced our research capabilities by years. We're seeing patterns and behaviors we never could before.",
     author: "Dr. Rachel Kruger",
-    role: "Research Lead, Global Elephant Protection",
-    image: "/images/testimonial3.jpg"
+    role: "Research Lead, Global Elephant Protection"
   }
 ];
 
@@ -91,19 +88,10 @@ const TestimonialSection = () => {
         </div>
         
         <div className="relative max-w-4xl mx-auto px-12">
-          <div ref={sliderRef} className="keen-slider min-h-[300px] md:min-h-[250px]">
+          <div ref={sliderRef} className="keen-slider min-h-[250px] md:min-h-[200px]">
             {testimonials.map((testimonial, idx) => (
               <div key={idx} className="keen-slider__slide">
                 <div className="glass-card p-8 md:p-10 rounded-xl text-center">
-                  <div className="w-20 h-20 mx-auto mb-6 relative">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-psyc-orange/30 to-amber-400/30 blur-md"></div>
-                    <img 
-                      src={testimonial.image} 
-                      alt={testimonial.author} 
-                      className="w-full h-full object-cover rounded-full border-2 border-psyc-orange/50 relative z-10"
-                    />
-                  </div>
-                  
                   <blockquote className="text-lg md:text-xl text-white/90 mb-6 italic">
                     "{testimonial.quote}"
                   </blockquote>

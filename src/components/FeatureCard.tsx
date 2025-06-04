@@ -16,11 +16,9 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   title,
   description,
   icon,
-  expandedContent,
   className,
   style,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -36,15 +34,13 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       whileHover={{ scale: 1.05 }}
       transition={{ duration: 0.3 }}
       className={cn(
-        'group bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10 shadow-lg transition-all duration-500 hover-card-3d cursor-pointer relative overflow-hidden',
-        isExpanded ? 'ring-2 ring-psyc-orange' : '',
+        'group bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/10 shadow-lg transition-all duration-500 hover-card-3d relative overflow-hidden',
         className
       )}
       style={{
         ...style,
-        transform: `perspective(1000px) rotateX(${coords.y * 10}deg) rotateY(${coords.x * 10}deg) scale(${isExpanded ? 1.05 : 1})`
+        transform: `perspective(1000px) rotateX(${coords.y * 10}deg) rotateY(${coords.x * 10}deg)`
       }}
-      onClick={() => setIsExpanded(!isExpanded)}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setCoords({ x: 0, y: 0 })}
     >
@@ -62,41 +58,6 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
             {title}
           </h3>
           <p className="text-white/80">{description}</p>
-          
-          <div
-            className={`overflow-hidden transition-all duration-700 ${
-              isExpanded ? 'mt-4 max-h-[300px] opacity-100' : 'max-h-0 opacity-0'
-            }`}
-          >
-            <div className="p-4 bg-black/50 rounded-lg border border-psyc-orange/30 cyber-border">
-              <p className="text-white/90">{expandedContent}</p>
-            </div>
-          </div>
-          
-          <button
-            className="mt-4 text-sm text-psyc-orange hover:text-amber-400 transition-colors flex items-center"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsExpanded(!isExpanded);
-            }}
-          >
-            {isExpanded ? 'Show less' : 'Read more'}
-            <svg
-              className={`ml-1 w-4 h-4 transition-transform transform ${
-                isExpanded ? 'rotate-180' : ''
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
         </div>
       </div>
       

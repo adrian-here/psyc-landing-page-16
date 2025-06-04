@@ -51,14 +51,6 @@ const PartnersSection = () => {
       image: "https://images.unsplash.com/photo-1494790108755-2616b612b1e0?w=150&h=150&fit=crop&crop=face",
       email: "priya.sharma@dsu.edu.in",
       linkedin: "https://linkedin.com/in/priyasharma"
-    },
-    {
-      name: "Dr. Arjun Patel",
-      role: "Head of Innovation",
-      company: "AICDSU",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-      email: "arjun.patel@aicdsu.edu",
-      linkedin: "https://linkedin.com/in/arjunpatel"
     }
   ];
 
@@ -134,7 +126,7 @@ const PartnersSection = () => {
             <span className="text-gradient">Key Partner Persons</span>
           </h3>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {keyPersons.map((person, index) => (
               <motion.div
                 key={person.name}
