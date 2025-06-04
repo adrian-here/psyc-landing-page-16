@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -122,7 +121,7 @@ const Footer = () => {
                 className="hover:text-psyc-orange transition-colors"
               >
                 {link}
-              </a>
+              </motion.a>
             ))}
           </div>
         </motion.div>
