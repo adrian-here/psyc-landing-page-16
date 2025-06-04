@@ -50,10 +50,11 @@ const Navbar = () => {
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 rounded-full bg-psyc-green flex items-center justify-center">
-                <span className="text-white font-bold text-xl">P</span>
-              </div>
-              <span className="text-white font-bold text-xl">PSYC</span>
+              <img 
+                src="/lovable-uploads/deda9b5b-0e4e-44a9-9c37-904e85806e7c.png" 
+                alt="PSYC Logo" 
+                className="h-12 w-auto"
+              />
             </Link>
           </div>
 

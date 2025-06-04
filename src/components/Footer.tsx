@@ -24,10 +24,11 @@ const Footer = () => {
             className="col-span-1 md:col-span-1"
           >
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-psyc-orange to-amber-400 flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-xl">P</span>
-              </div>
-              <span className="text-white font-bold text-xl">PSYC</span>
+              <img 
+                src="/lovable-uploads/deda9b5b-0e4e-44a9-9c37-904e85806e7c.png" 
+                alt="PSYC Logo" 
+                className="h-16 w-auto"
+              />
             </div>
             <p className="text-white/70 mb-4">
               Revolutionizing wildlife control with precision drone technology.
