@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Check, Send, Loader2 } from 'lucide-react';
+import { Check, Send, Loader2, MapPin, Building } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import LocationMap from './LocationMap';
 
 const CTASection = () => {
   const [formData, setFormData] = useState({
@@ -203,6 +204,44 @@ ${formData.message}
             </div>
             
             <div className="space-y-8">
+              <div>
+                <h3 className="text-2xl font-bold text-psyc-orange mb-4">Our Locations</h3>
+                
+                <div className="space-y-4 mb-6">
+                  <div className="bg-black/30 p-4 border border-white/10 rounded-lg hover:border-psyc-orange/30 transition-all duration-300">
+                    <div className="flex items-start space-x-3">
+                      <Building className="w-5 h-5 text-psyc-orange mt-1 flex-shrink-0" />
+                      <div>
+                        <h4 className="text-lg font-bold mb-2 text-white">Registered Office</h4>
+                        <p className="text-white/80 text-sm leading-relaxed">
+                          C/O T N VISHUKUMAR<br />
+                          Lingadahalli Main Road<br />
+                          Tarikere, Chickmagalur<br />
+                          Karnataka - 577228
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-black/30 p-4 border border-white/10 rounded-lg hover:border-psyc-orange/30 transition-all duration-300">
+                    <div className="flex items-start space-x-3">
+                      <MapPin className="w-5 h-5 text-psyc-orange mt-1 flex-shrink-0" />
+                      <div>
+                        <h4 className="text-lg font-bold mb-2 text-white">Incubated at AICDSU Foundation</h4>
+                        <p className="text-white/80 text-sm leading-relaxed">
+                          VJPR+WGG, Service Rd<br />
+                          Kudlu Main Rd, Srinivasa Nagar<br />
+                          Hal Layout, Singasandra<br />
+                          Bengaluru, Karnataka - 560068
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <LocationMap />
+              </div>
+              
               <div>
                 <h3 className="text-2xl font-bold text-psyc-orange mb-4">Partner With Us</h3>
                 <div className="space-y-5">

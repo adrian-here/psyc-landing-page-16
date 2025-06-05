@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
+import { MapPin, Building } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -15,7 +17,7 @@ const Footer = () => {
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMCBoNDAgdjQwIEgwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDExMSwgMCwgMC4wMykiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9zdmc+')] opacity-30"></div>
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -100,12 +102,53 @@ const Footer = () => {
               ))}
             </ul>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="font-bold text-lg mb-4 text-gradient">Contact & Location</h3>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-start space-x-2">
+                  <Building className="w-4 h-4 text-psyc-orange mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-white/90">Registered Office:</p>
+                    <p className="text-xs text-white/70 leading-relaxed">
+                      C/O T N VISHUKUMAR<br />
+                      Lingadahalli Main Road<br />
+                      Tarikere, Chickmagalur<br />
+                      Karnataka - 577228
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex items-start space-x-2">
+                  <MapPin className="w-4 h-4 text-psyc-orange mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-white/90">Incubated at:</p>
+                    <p className="text-xs text-white/70 leading-relaxed">
+                      AICDSU Foundation<br />
+                      VJPR+WGG, Service Rd<br />
+                      Kudlu Main Rd, Srinivasa Nagar<br />
+                      Hal Layout, Singasandra<br />
+                      Bengaluru, Karnataka - 560068
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
         
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
           className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center"
         >
