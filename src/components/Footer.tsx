@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Building } from 'lucide-react';
@@ -16,13 +17,13 @@ const Footer = () => {
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMCBoNDAgdjQwIEgwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDExMSwgMCwgMC4wMykiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9zdmc+')] opacity-30"></div>
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="col-span-1 md:col-span-1"
+            className="col-span-1"
           >
             <div className="flex items-center space-x-2 mb-4">
               <img 
@@ -61,6 +62,7 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
+            className="col-span-1"
           >
             <h3 className="font-bold text-lg mb-4 text-gradient">Quick Links</h3>
             <ul className="space-y-2 text-white/70">
@@ -84,6 +86,7 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
+            className="col-span-1"
           >
             <h3 className="font-bold text-lg mb-4 text-gradient">Resources</h3>
             <ul className="space-y-2 text-white/70">
@@ -107,6 +110,7 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
+            className="col-span-1"
           >
             <h3 className="font-bold text-lg mb-4 text-gradient">Contact & Location</h3>
             <div className="space-y-4">
@@ -140,23 +144,28 @@ const Footer = () => {
                   </div>
                 </div>
               </div>
-              
-              {/* Google Maps iframe */}
-              <div className="mt-4">
-                <p className="text-sm font-medium text-white/90 mb-2">Our Location:</p>
-                <div className="relative w-full h-48 rounded-lg overflow-hidden border border-psyc-orange/30">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243.63842738821588!2d77.6634447!3d12.8625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6b9a4bce6fc5%3A0x9f1f1f1f1f1f1f1f!2sAICDSU%20Foundation!5e0!3m2!1sen!2sin!4v1635789012345!5m2!1sen!2sin"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="rounded-lg"
-                  ></iframe>
-                </div>
-              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="col-span-1"
+          >
+            <h3 className="font-bold text-lg mb-4 text-gradient">Our Location</h3>
+            <div className="relative w-full h-48 rounded-lg overflow-hidden border border-psyc-orange/30">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243.63842738821588!2d77.6634447!3d12.8625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6b9a4bce6fc5%3A0x9f1f1f1f1f1f1f1f!2sAICDSU%20Foundation!5e0!3m2!1sen!2sin!4v1635789012345!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="rounded-lg"
+              ></iframe>
             </div>
           </motion.div>
         </div>
@@ -164,7 +173,7 @@ const Footer = () => {
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
           viewport={{ once: true }}
           className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center"
         >
@@ -181,7 +190,7 @@ const Footer = () => {
                 className="hover:text-psyc-orange transition-colors"
               >
                 {link}
-              </motion.a>
+              </a>
             ))}
           </div>
         </motion.div>
