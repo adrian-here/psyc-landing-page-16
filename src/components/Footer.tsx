@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Building } from 'lucide-react';
@@ -139,6 +138,23 @@ const Footer = () => {
                       Bengaluru, Karnataka - 560068
                     </p>
                   </div>
+                </div>
+              </div>
+              
+              {/* Google Maps iframe */}
+              <div className="mt-4">
+                <p className="text-sm font-medium text-white/90 mb-2">Our Location:</p>
+                <div className="relative w-full h-48 rounded-lg overflow-hidden border border-psyc-orange/30">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243.63842738821588!2d77.6634447!3d12.8625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6b9a4bce6fc5%3A0x9f1f1f1f1f1f1f1f!2sAICDSU%20Foundation!5e0!3m2!1sen!2sin!4v1635789012345!5m2!1sen!2sin"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="rounded-lg"
+                  ></iframe>
                 </div>
               </div>
             </div>

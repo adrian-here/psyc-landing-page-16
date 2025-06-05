@@ -1,9 +1,9 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Check, Send, Loader2, MapPin, Building } from 'lucide-react';
+import { Check, Send, Loader2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import LocationMap from './LocationMap';
 
 const CTASection = () => {
   const [formData, setFormData] = useState({
@@ -78,7 +78,7 @@ ${formData.message}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true, amount: 0.3 }}
-          className="max-w-5xl mx-auto bg-gradient-to-r from-black/80 to-black/60 rounded-xl p-8 md:p-12 shadow-2xl border border-psyc-orange/30 backdrop-blur-sm cyber-border"
+          className="max-w-4xl mx-auto bg-gradient-to-r from-black/80 to-black/60 rounded-xl p-8 md:p-12 shadow-2xl border border-psyc-orange/30 backdrop-blur-sm cyber-border"
         >
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-5xl font-bold mb-6 relative inline-block">
@@ -91,220 +91,115 @@ ${formData.message}
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-psyc-orange">Contact Us</h3>
-              
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="space-y-3">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="name" className="block text-white mb-1 text-sm">Your Name</label>
-                      <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 bg-black/50 border border-white/20 rounded-md focus:border-psyc-orange/50 focus:ring-1 focus:ring-psyc-orange/50 text-white"
-                        placeholder="John Doe"
-                        disabled={formState === 'submitting' || formState === 'success'}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="email" className="block text-white mb-1 text-sm">Email Address</label>
-                      <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 bg-black/50 border border-white/20 rounded-md focus:border-psyc-orange/50 focus:ring-1 focus:ring-psyc-orange/50 text-white"
-                        placeholder="you@example.com"
-                        disabled={formState === 'submitting' || formState === 'success'}
-                      />
-                    </div>
-                  </div>
-                  
+          <div className="max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-psyc-orange mb-6 text-center">Contact Us</h3>
+            
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="organization" className="block text-white mb-1 text-sm">Organization</label>
+                    <label htmlFor="name" className="block text-white mb-1 text-sm">Your Name</label>
                     <input
-                      id="organization"
-                      name="organization"
+                      id="name"
+                      name="name"
                       type="text"
-                      value={formData.organization}
+                      required
+                      value={formData.name}
                       onChange={handleChange}
                       className="w-full px-4 py-2 bg-black/50 border border-white/20 rounded-md focus:border-psyc-orange/50 focus:ring-1 focus:ring-psyc-orange/50 text-white"
-                      placeholder="Company or Organization"
+                      placeholder="John Doe"
                       disabled={formState === 'submitting' || formState === 'success'}
                     />
                   </div>
-                  
                   <div>
-                    <label htmlFor="interest" className="block text-white mb-1 text-sm">Primary Interest</label>
-                    <select
-                      id="interest"
-                      name="interest"
-                      value={formData.interest}
+                    <label htmlFor="email" className="block text-white mb-1 text-sm">Email Address</label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      value={formData.email}
                       onChange={handleChange}
                       className="w-full px-4 py-2 bg-black/50 border border-white/20 rounded-md focus:border-psyc-orange/50 focus:ring-1 focus:ring-psyc-orange/50 text-white"
+                      placeholder="you@example.com"
                       disabled={formState === 'submitting' || formState === 'success'}
-                    >
-                      <option value="conservation">Conservation Operations</option>
-                      <option value="technology">Technology Partnership</option>
-                      <option value="investment">Investment Opportunities</option>
-                      <option value="research">Research Collaboration</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="message" className="block text-white mb-1 text-sm">Message</label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={4}
-                      value={formData.message}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 bg-black/50 border border-white/20 rounded-md focus:border-psyc-orange/50 focus:ring-1 focus:ring-psyc-orange/50 text-white resize-none"
-                      placeholder="Tell us how we can help you..."
-                      disabled={formState === 'submitting' || formState === 'success'}
-                    ></textarea>
+                    />
                   </div>
                 </div>
                 
-                <Button
-                  type="submit"
-                  className="w-full py-6 bg-psyc-orange hover:bg-amber-500 text-white flex items-center justify-center space-x-2"
-                  disabled={formState === 'submitting' || formState === 'success'}
-                >
-                  {formState === 'idle' && (
-                    <>
-                      <Send size={18} />
-                      <span>Send Message</span>
-                    </>
-                  )}
-                  {formState === 'submitting' && (
-                    <>
-                      <Loader2 size={18} className="animate-spin" />
-                      <span>Opening Email Client...</span>
-                    </>
-                  )}
-                  {formState === 'success' && (
-                    <>
-                      <Check size={18} />
-                      <span>Email Client Opened!</span>
-                    </>
-                  )}
-                </Button>
-              </form>
-            </div>
-            
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-2xl font-bold text-psyc-orange mb-4">Our Locations</h3>
-                
-                <div className="space-y-4 mb-6">
-                  <div className="bg-black/30 p-4 border border-white/10 rounded-lg hover:border-psyc-orange/30 transition-all duration-300">
-                    <div className="flex items-start space-x-3">
-                      <Building className="w-5 h-5 text-psyc-orange mt-1 flex-shrink-0" />
-                      <div>
-                        <h4 className="text-lg font-bold mb-2 text-white">Registered Office</h4>
-                        <p className="text-white/80 text-sm leading-relaxed">
-                          C/O T N VISHUKUMAR<br />
-                          Lingadahalli Main Road<br />
-                          Tarikere, Chickmagalur<br />
-                          Karnataka - 577228
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-black/30 p-4 border border-white/10 rounded-lg hover:border-psyc-orange/30 transition-all duration-300">
-                    <div className="flex items-start space-x-3">
-                      <MapPin className="w-5 h-5 text-psyc-orange mt-1 flex-shrink-0" />
-                      <div>
-                        <h4 className="text-lg font-bold mb-2 text-white">Incubated at AICDSU Foundation</h4>
-                        <p className="text-white/80 text-sm leading-relaxed">
-                          VJPR+WGG, Service Rd<br />
-                          Kudlu Main Rd, Srinivasa Nagar<br />
-                          Hal Layout, Singasandra<br />
-                          Bengaluru, Karnataka - 560068
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                <div>
+                  <label htmlFor="organization" className="block text-white mb-1 text-sm">Organization</label>
+                  <input
+                    id="organization"
+                    name="organization"
+                    type="text"
+                    value={formData.organization}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 bg-black/50 border border-white/20 rounded-md focus:border-psyc-orange/50 focus:ring-1 focus:ring-psyc-orange/50 text-white"
+                    placeholder="Company or Organization"
+                    disabled={formState === 'submitting' || formState === 'success'}
+                  />
                 </div>
                 
-                <LocationMap />
-              </div>
-              
-              <div>
-                <h3 className="text-2xl font-bold text-psyc-orange mb-4">Partner With Us</h3>
-                <div className="space-y-5">
-                  <div className="bg-black/30 p-5 border border-white/10 rounded-lg hover:border-psyc-orange/30 transition-all duration-300 hover:shadow-md cyber-border">
-                    <h4 className="text-xl font-bold mb-2 text-white">For Conservation Organizations</h4>
-                    <ul className="space-y-3 text-white/80">
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-psyc-orange mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span>Improve safety for your wildlife management teams</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-psyc-orange mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span>Reduce animal stress during operations</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-psyc-orange mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span>Collect valuable health and behavior data</span>
-                      </li>
-                    </ul>
-                  </div>
-                  
-                  <div className="bg-black/30 p-5 border border-white/10 rounded-lg hover:border-psyc-orange/30 transition-all duration-300 hover:shadow-md cyber-border">
-                    <h4 className="text-xl font-bold mb-2 text-white">For Technology Partners</h4>
-                    <ul className="space-y-3 text-white/80">
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-psyc-orange mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span>Join our ecosystem of conservation technology</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-psyc-orange mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span>Integrate your solutions with our platform</span>
-                      </li>
-                      <li className="flex items-start">
-                        <svg className="w-5 h-5 text-psyc-orange mr-2 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <span>Collaborate on next-generation conservation tech</span>
-                      </li>
-                    </ul>
-                  </div>
+                <div>
+                  <label htmlFor="interest" className="block text-white mb-1 text-sm">Primary Interest</label>
+                  <select
+                    id="interest"
+                    name="interest"
+                    value={formData.interest}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 bg-black/50 border border-white/20 rounded-md focus:border-psyc-orange/50 focus:ring-1 focus:ring-psyc-orange/50 text-white"
+                    disabled={formState === 'submitting' || formState === 'success'}
+                  >
+                    <option value="conservation">Conservation Operations</option>
+                    <option value="technology">Technology Partnership</option>
+                    <option value="investment">Investment Opportunities</option>
+                    <option value="research">Research Collaboration</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label htmlFor="message" className="block text-white mb-1 text-sm">Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    rows={4}
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 bg-black/50 border border-white/20 rounded-md focus:border-psyc-orange/50 focus:ring-1 focus:ring-psyc-orange/50 text-white resize-none"
+                    placeholder="Tell us how we can help you..."
+                    disabled={formState === 'submitting' || formState === 'success'}
+                  ></textarea>
                 </div>
               </div>
               
-              <div className="bg-gradient-to-r from-psyc-orange/10 to-transparent p-5 rounded-lg border border-psyc-orange/30">
-                <h4 className="text-xl font-bold mb-3 text-psyc-orange">Schedule a Demo</h4>
-                <p className="text-white/80 mb-4">
-                  See the PSYC system in action with a personalized demo tailored to your specific needs and conservation challenges.
-                </p>
-                <Button className="w-full bg-psyc-orange hover:bg-amber-500 text-white">
-                  Request a Demo
-                </Button>
-              </div>
-            </div>
+              <Button
+                type="submit"
+                className="w-full py-6 bg-psyc-orange hover:bg-amber-500 text-white flex items-center justify-center space-x-2"
+                disabled={formState === 'submitting' || formState === 'success'}
+              >
+                {formState === 'idle' && (
+                  <>
+                    <Send size={18} />
+                    <span>Send Message</span>
+                  </>
+                )}
+                {formState === 'submitting' && (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Opening Email Client...</span>
+                  </>
+                )}
+                {formState === 'success' && (
+                  <>
+                    <Check size={18} />
+                    <span>Email Client Opened!</span>
+                  </>
+                )}
+              </Button>
+            </form>
           </div>
         </motion.div>
         
